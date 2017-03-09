@@ -1,0 +1,30 @@
+{
+  "name": "makestuff",
+  "version": "0.0.1",
+  "description": "Tiny scaffolding tool for your project",
+  "author": {
+    "name": "Alexandr Rodik",
+    "email": "alexandr.rodik@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "scaffolding",
+    "generator",
+    "generate",
+    "make",
+    "create",
+    "file"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arodik/makestuff.js.git"
+  },
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "caporal": "0.3.0",
+    "typescript": "2.2.1"
+  },
+  "devDependencies": {
+  }
+}
