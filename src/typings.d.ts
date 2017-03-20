@@ -28,6 +28,11 @@ declare namespace Makestuff {
     }
 
     interface IGenerator {
+        execute(): IGeneratorResult;
+    }
 
+    interface IGeneratorResult {
+        filesCreated: Array<string>;
+        errors: Array<string>;
     }
 }
