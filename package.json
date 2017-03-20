@@ -3,18 +3,18 @@
   "version": "0.0.1",
   "description": "Tiny scaffolding tool for your project",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/shell.js",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "tsc --watch --pretty",
     "build": "tsc",
     "postinstall": "npm run build"
   },
   "dependencies": {
+    "@types/node": "7.0.7",
     "caporal": "0.3.0",
     "typescript": "2.2.1"
   },
   "devDependencies": {
-    "@types/node": "7.0.7"
   },
   "author": {
     "name": "Alexandr Rodik",
