@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsc --watch --pretty",
     "build": "tsc",
+    "test": "jest --watchAll",
     "postinstall": "npm run build"
   },
   "dependencies": {
@@ -15,6 +16,16 @@
     "typescript": "2.2.1"
   },
   "devDependencies": {
+    "@types/jest": "19.2.2",
+    "jest": "19.0.2",
+    "ts-jest": "19.0.2"
+  },
+  "jest": {
+    "transform": {
+      ".ts": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|js)$",
+    "moduleFileExtensions": ["ts", "js"]
   },
   "author": {
     "name": "Alexandr Rodik",
