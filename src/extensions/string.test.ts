@@ -36,8 +36,8 @@ describe("getWords", function() {
 
     test("uppercase and numbers", function() {
         const testSet = [
-            {str:"TestTest1Test2", result: ["Test", "Test", "1", "Test2"]},
-            {str:"Test-Test1Test2", result: ["Test", "Test", "1", "Test2"]},
+            {str:"TestTest1Test2", result: ["Test", "Test1", "Test2"]},
+            {str:"Test-Test1Test2", result: ["Test", "Test1", "Test2"]},
             {str:"TestTest1-Test2", result: ["Test", "Test1", "Test2"]}
         ];
 

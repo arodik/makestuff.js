@@ -3,9 +3,15 @@ export default class StringExtension {
     /**
      *  Get words from
      *  PascalCase, camelCase, kebab-case, Train-Case, snake_case, dot.case
+     *  doesn't support abbreviations
      */
     static getWords(target: string): Array<string> {
-        return target.split(/[\s\-._]+/);
+        let withWhitespaces = target.replace(/([A-Z])/g, " $1");
+        if (withWhitespaces[0] === " ") {
+            // remove the redundant whitespace
+            withWhitespaces = withWhitespaces.slice(1);
+        }
+        return withWhitespaces.split(/[\s\-._]+/);
     }
 
     static ucfirst(target: string): string {
