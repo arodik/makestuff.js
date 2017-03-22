@@ -47,3 +47,37 @@ describe("getWords", function() {
         });
     });
 });
+
+describe("string transformations", function() {
+    const testString = "Some.test-Sentence_here yeah";
+
+    test("camel case", function() {
+        expect(StringExtension.camelCase(testString))
+            .toEqual("someTestSentenceHereYeah");
+    });
+
+    test("pascal case", function() {
+        expect(StringExtension.pascalCase(testString))
+            .toEqual("SomeTestSentenceHereYeah");
+    });
+
+    test("kebab case", function() {
+        expect(StringExtension.kebabCase(testString))
+            .toEqual("some-test-sentence-here-yeah");
+    });
+
+    test("train case", function() {
+        expect(StringExtension.trainCase(testString))
+            .toEqual("Some-Test-Sentence-Here-Yeah");
+    });
+
+    test("snake case", function() {
+        expect(StringExtension.snakeCase(testString))
+            .toEqual("some_test_sentence_here_yeah");
+    });
+
+    test("dot case", function() {
+        expect(StringExtension.dotCase(testString))
+            .toEqual("some.test.sentence.here.yeah");
+    });
+});
