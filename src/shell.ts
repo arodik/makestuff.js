@@ -1,19 +1,32 @@
 import IGeneratorSettings = Makestuff.IGeneratorSettings;
-import IGenerator = Makestuff.IGenerator;
+import Generator from "./generator/generator";
 
-const generator = require("./generator/generator");
-
-class MakestuffShell {
-    private generators: Array<IGenerator> = [];
+export default class GeneratorShell {
+    private generators: Array<IGeneratorSettings> = [];
 
     setupGenerator(settings: IGeneratorSettings) {
-        this.generators.push(new Generator(settings));
+        this.generators.push(settings);
     }
 
     // example: component, /layout/TestComponent, ui-kit
-    run(generator: string, path: string, root?: string) {
+    run(generatorName: string, path: string, root?: string) {
+        const generatorSettings = this.findGeneratorSettingsByName(generatorName);
+        if (!generatorSettings) {
+            console.log(`Can't find generator with name ${generatorName}`);
+            return;
+        }
 
+        const generator = new Generator(generatorSettings);
+        const result = generator.execute(path, root);
+
+        console.log("Generated", result);
+    }
+
+    private findGeneratorSettingsByName(id: string): IGeneratorSettings | null {
+        const searchResult = this.generators.find(function(generator) {
+            return generator.name === id;
+        });
+
+        return searchResult || null;
     }
 }
-
-exports = MakestuffShell;

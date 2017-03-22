@@ -1,4 +1,4 @@
-class MakestuffCli {
+export default class MakestuffCli {
     // example: component ui-kit:/layout/TestComponent
     runWithArgs(args: Array<string>) {
 
@@ -9,5 +9,3 @@ class MakestuffCli {
 
     }
 }
-
-module.exports = MakestuffCli;

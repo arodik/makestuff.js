@@ -1,10 +1,8 @@
-class Generator implements Makestuff.IGenerator {
+export default class Generator implements Makestuff.IGenerator {
     constructor(private config: Makestuff.IGeneratorSettings) {
     }
 
-    execute(): Makestuff.IGeneratorResult {
+    execute(path: string, root?: string): Makestuff.IGeneratorResult {
 
     }
 }
-
-module.exports = Generator;

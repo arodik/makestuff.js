@@ -28,7 +28,7 @@ declare namespace Makestuff {
     }
 
     interface IGenerator {
-        execute(): IGeneratorResult;
+        execute(path: string, root?: string): IGeneratorResult;
     }
 
     interface IGeneratorResult {
