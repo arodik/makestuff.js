@@ -13,26 +13,45 @@ declare namespace Makestuff {
         }
     }
 
+    interface IOutputNameGeneratorData {
+        name: {
+            raw: string;
+            camelCase: string;
+            pascalCase: string;
+            kebabCase: string;
+            trainCase: string;
+            snakeCase: string;
+            dotCase: string;
+        }
+    }
+
     interface IOutputFileDescription {
-        template: string;
-        outputName: ((data: any) => string) | string
+        template?: string;
+        outputName: ((data: IOutputNameGeneratorData) => string) | string
     }
 
     interface IGeneratorSettings {
         name: string;
         root: string | Array<IRootDescription>;
-        namingConvention?: string;
-        flags: IGeneratorFlags;
-        templateVars: (input: any, predefinedSettings: any) => Object;
+        namingConvention?: "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
+        flags?: IGeneratorFlags;
+        templateVars?: (input: any, predefinedSettings: any) => Object;
         outputFiles: Array<string | IOutputFileDescription>
     }
 
     interface IGenerator {
-        execute(path: string, root?: string): IGeneratorResult;
+        execute(path: string, options?: Array<string>, root?: string): IGeneratorResult;
     }
 
     interface IGeneratorResult {
-        filesCreated: Array<string>;
+        created: Array<string>;
         errors: Array<string>;
     }
+
+    interface IGeneratorShell {
+        setupGenerator(settings: IGeneratorSettings): void;
+        run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): number;
+    }
 }
+
+declare module mkdirp {}

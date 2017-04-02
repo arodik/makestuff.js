@@ -1,25 +1,48 @@
 import IGeneratorSettings = Makestuff.IGeneratorSettings;
 import Generator from "./generator/generator";
 
-export default class GeneratorShell {
+export enum ERROR_CODES {
+    generatorDoesntExist = 1,
+    invalidNamingConvention,
+}
+
+export default class GeneratorShell implements Makestuff.IGeneratorShell {
     private generators: Array<IGeneratorSettings> = [];
 
     setupGenerator(settings: IGeneratorSettings) {
         this.generators.push(settings);
     }
 
-    // example: component, /layout/TestComponent, ui-kit
-    run(generatorName: string, path: string, root?: string) {
+    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): number {
         const generatorSettings = this.findGeneratorSettingsByName(generatorName);
         if (!generatorSettings) {
             console.log(`Can't find generator with name ${generatorName}`);
-            return;
+            return ERROR_CODES.generatorDoesntExist;
+        }
+
+        if (!this.checkNamingConvention(generatorSettings.namingConvention)) {
+            console.log(`Invalid naming convention ${generatorSettings.namingConvention}`);
+            return ERROR_CODES.invalidNamingConvention;
         }
 
         const generator = new Generator(generatorSettings);
-        const result = generator.execute(path, root);
+        const result = generator.execute(path, options, projectRoot);
 
         console.log("Generated", result);
+
+        return 0;
+    }
+
+    private checkNamingConvention(convention?: string): boolean {
+        if (convention === undefined) {
+            return true;
+        }
+
+        const validNamingValues = [
+            "camelCase", "pascalCase", "kebabCase", "trainCase", "snakeCase", "dotCase"
+        ];
+
+        return validNamingValues.indexOf(convention) !== -1;
     }
 
     private findGeneratorSettingsByName(id: string): IGeneratorSettings | null {
