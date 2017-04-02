@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/node": "7.0.12",
     "caporal": "0.4.1",
+    "mkdirp": "0.5.1",
     "typescript": "2.2.2"
   },
   "devDependencies": {
