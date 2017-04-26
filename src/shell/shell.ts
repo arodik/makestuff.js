@@ -1,10 +1,7 @@
-import Generator from "./generator/generator";
-import {IResult, ISettings as IGeneratorSettings} from "./generator/interfaces";
-
-export enum ERROR_CODES {
-    generatorDoesntExist = 1,
-    invalidNamingConvention,
-}
+import Generator from "../generator/generator";
+import {IResult, ISettings as IGeneratorSettings} from "../generator/interfaces";
+import {WrongGeneratorNameError} from "./error/wrong-generator-name";
+import {WrongNameConventionError} from "./error/wrong-name-convention";
 
 export default class GeneratorShell {
     private generators: Array<IGeneratorSettings> = [];
@@ -13,16 +10,14 @@ export default class GeneratorShell {
         this.generators.push(settings);
     }
 
-    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): IResult | number {
+    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): IResult {
         const generatorSettings = this.findGeneratorSettingsByName(generatorName);
         if (!generatorSettings) {
-            console.log(`Can't find generator with name ${generatorName}`);
-            return ERROR_CODES.generatorDoesntExist;
+            throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);
         }
 
         if (!this.checkNamingConvention(generatorSettings.namingConvention)) {
-            console.log(`Invalid naming convention ${generatorSettings.namingConvention}`);
-            return ERROR_CODES.invalidNamingConvention;
+            throw new WrongNameConventionError(`Invalid naming convention ${generatorSettings.namingConvention}`);
         }
 
         const generator = new Generator(generatorSettings);

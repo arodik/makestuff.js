@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Tiny scaffolding tool for your project",
   "license": "MIT",
-  "main": "dist/shell.js",
+  "main": "dist/shell/shell.js",
   "scripts": {
     "dev": "tsc --watch --pretty",
     "build": "tsc",

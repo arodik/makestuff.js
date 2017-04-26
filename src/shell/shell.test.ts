@@ -2,7 +2,7 @@ import GeneratorShell from "./shell";
 import * as path from "path";
 import * as mockFs from "mock-fs";
 import * as fs from "fs";
-import {IResult} from "./generator/interfaces";
+import {IResult} from "../generator/interfaces";
 
 const testDir = path.resolve(__dirname, "../test");
 
@@ -37,9 +37,8 @@ describe("shell", function() {
 
         const result = generator.run("component", testComponentPath, [], testDir);
 
-        expect(typeof result).toBe("object");
-        expect((result as IResult).created.length).toBe(testFiles.length);
-        expect((result as IResult).errors.length).toBe(0);
+        expect(result.created.length).toBe(testFiles.length);
+        expect(result.errors.length).toBe(0);
 
         const resultFiles = fs.readdirSync(path.resolve(testDir, testComponentPath));
 
