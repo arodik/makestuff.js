@@ -1,15 +1,13 @@
 import * as Path from "path";
 import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/file";
-import IOutputNameGeneratorData = Makestuff.IOutputNameGeneratorData;
-import IOutputFileDescription = Makestuff.IOutputFileDescription;
-import * as mkdirp from "mkdirp";
+import {IOutputFileDescription, IOutputNameData, IResult, ISettings} from "./interfaces";
 
-export default class Generator implements Makestuff.IGenerator {
-    constructor(private config: Makestuff.IGeneratorSettings) {
+export default class Generator {
+    constructor(private config: ISettings) {
     }
 
-    execute(path: string, options?: Array<string>, root?: string): Makestuff.IGeneratorResult {
+    execute(path: string, options?: Array<string>, root?: string): IResult {
         const rootPath = root ? root : process.cwd(),
             createDirectory = this.config.createDirectory !== false,
             entityDirPath = Path.dirname(path),
@@ -22,9 +20,9 @@ export default class Generator implements Makestuff.IGenerator {
             return this.createFiles(absoluteEntityDirPath, rawName);
     }
 
-    private createFiles(pathTo: string, rawName: string): Makestuff.IGeneratorResult {
+    private createFiles(pathTo: string, rawName: string): IResult {
         const filesToCreate = this.normalizeOutputFiles(rawName);
-        const result: Makestuff.IGeneratorResult = {
+        const result: IResult = {
             created: [],
             errors: []
         };
@@ -66,7 +64,7 @@ export default class Generator implements Makestuff.IGenerator {
         });
     }
 
-    private getGeneratorData(name: string): IOutputNameGeneratorData {
+    private getGeneratorData(name: string): IOutputNameData {
         return {
             name: {
                 raw: name,

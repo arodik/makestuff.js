@@ -9,7 +9,7 @@ function cleanTestDir() {
 }
 
 describe("shell", function() {
-    let generator: Makestuff.IGeneratorShell;
+    let generator: GeneratorShell;
 
     beforeEach(function() {
         cleanTestDir();
@@ -21,6 +21,7 @@ describe("shell", function() {
     test("can create empty files with proper names", function() {
         generator.setupGenerator({
             name: "component",
+            root: testDir,
             outputFiles: [
                 "index.test",
                 { outputName: (data) => `${data.name.raw}.test` },
@@ -33,7 +34,7 @@ describe("shell", function() {
             ]
         });
 
-        const result = generator.run("component", "components/TestComponent", {}, testDir);
+        const result = generator.run("component", "components/TestComponent", [], testDir);
 
         expect(result).toBe(0);
     });

@@ -1,12 +1,12 @@
-import IGeneratorSettings = Makestuff.IGeneratorSettings;
 import Generator from "./generator/generator";
+import {ISettings as IGeneratorSettings} from "./generator/interfaces";
 
 export enum ERROR_CODES {
     generatorDoesntExist = 1,
     invalidNamingConvention,
 }
 
-export default class GeneratorShell implements Makestuff.IGeneratorShell {
+export default class GeneratorShell {
     private generators: Array<IGeneratorSettings> = [];
 
     setupGenerator(settings: IGeneratorSettings) {
