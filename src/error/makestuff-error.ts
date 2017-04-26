@@ -1,9 +1,13 @@
 export class MakestuffError {
-    name: string;
+    protected name: string;
 
     constructor(message: string) {
+        this.name = message;
         Error.call(this);
         Error.captureStackTrace(this);
-        this.name = message;
+    }
+
+    toString(): string {
+        return `Makestuff error: ${this.name}`;
     }
 }
