@@ -1,5 +1,5 @@
 import Generator from "./generator/generator";
-import {ISettings as IGeneratorSettings} from "./generator/interfaces";
+import {IResult, ISettings as IGeneratorSettings} from "./generator/interfaces";
 
 export enum ERROR_CODES {
     generatorDoesntExist = 1,
@@ -13,7 +13,7 @@ export default class GeneratorShell {
         this.generators.push(settings);
     }
 
-    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): number {
+    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): IResult | number {
         const generatorSettings = this.findGeneratorSettingsByName(generatorName);
         if (!generatorSettings) {
             console.log(`Can't find generator with name ${generatorName}`);
@@ -26,11 +26,8 @@ export default class GeneratorShell {
         }
 
         const generator = new Generator(generatorSettings);
-        const result = generator.execute(path, options, projectRoot);
 
-        console.log("Generated", result);
-
-        return 0;
+        return generator.execute(path, options, projectRoot);
     }
 
     private checkNamingConvention(convention?: string): boolean {

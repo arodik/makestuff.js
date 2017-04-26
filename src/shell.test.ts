@@ -1,41 +1,48 @@
 import GeneratorShell from "./shell";
 import * as path from "path";
-import * as fsExtra from "fs-extra";
+import * as mockFs from "mock-fs";
+import * as fs from "fs";
+import {IResult} from "./generator/interfaces";
 
 const testDir = path.resolve(__dirname, "../test");
-
-function cleanTestDir() {
-    fsExtra.removeSync(testDir);
-}
 
 describe("shell", function() {
     let generator: GeneratorShell;
 
     beforeEach(function() {
-        cleanTestDir();
+        mockFs();
         generator = new GeneratorShell();
     });
 
-    afterAll(cleanTestDir);
+    afterEach(mockFs.restore);
 
     test("can create empty files with proper names", function() {
+        const testComponentPath = "components/TestComponent",
+            testFiles = [
+                "index.test",
+                { outputName: (data) => `raw.${data.name.raw}.test` },
+                { outputName: (data) => `cc.${data.name.camelCase}.test` },
+                { outputName: (data) => `pc.${data.name.pascalCase}.test` },
+                { outputName: (data) => `kc.${data.name.kebabCase}.test` },
+                { outputName: (data) => `tc.${data.name.trainCase}.test` },
+                { outputName: (data) => `sc.${data.name.snakeCase}.test` },
+                { outputName: (data) => `dc.${data.name.dotCase}.test` },
+            ];
+
         generator.setupGenerator({
             name: "component",
             root: testDir,
-            outputFiles: [
-                "index.test",
-                { outputName: (data) => `${data.name.raw}.test` },
-                { outputName: (data) => `${data.name.camelCase}.test` },
-                { outputName: (data) => `${data.name.pascalCase}.test` },
-                { outputName: (data) => `${data.name.kebabCase}.test` },
-                { outputName: (data) => `${data.name.trainCase}.test` },
-                { outputName: (data) => `${data.name.snakeCase}.test` },
-                { outputName: (data) => `${data.name.dotCase}.test` },
-            ]
+            outputFiles: testFiles
         });
 
-        const result = generator.run("component", "components/TestComponent", [], testDir);
+        const result = generator.run("component", testComponentPath, [], testDir);
 
-        expect(result).toBe(0);
+        expect(typeof result).toBe("object");
+        expect((result as IResult).created.length).toBe(testFiles.length);
+        expect((result as IResult).errors.length).toBe(0);
+
+        const resultFiles = fs.readdirSync(path.resolve(testDir, testComponentPath));
+
+        expect(resultFiles.length).toBe(testFiles.length);
     });
 });
