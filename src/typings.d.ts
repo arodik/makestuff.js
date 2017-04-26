@@ -1,3 +1,5 @@
+declare module "mkdirp";
+
 declare namespace Makestuff {
     interface IRootDescription {
         name: string;
