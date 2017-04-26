@@ -1,4 +1,6 @@
 declare module "mkdirp";
+declare module "rimraf";
+declare module "fs-extra";
 
 declare namespace Makestuff {
     interface IRootDescription {
@@ -18,6 +20,7 @@ declare namespace Makestuff {
     interface IOutputNameGeneratorData {
         name: {
             raw: string;
+            configured: string;
             camelCase: string;
             pascalCase: string;
             kebabCase: string;
@@ -32,10 +35,13 @@ declare namespace Makestuff {
         outputName: ((data: IOutputNameGeneratorData) => string) | string
     }
 
+    type namingConventions = "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
+
     interface IGeneratorSettings {
         name: string;
         root: string | Array<IRootDescription>;
-        namingConvention?: "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
+        namingConvention?: namingConventions;
+        createDirectory?: boolean;
         flags?: IGeneratorFlags;
         templateVars?: (input: any, predefinedSettings: any) => Object;
         outputFiles: Array<string | IOutputFileDescription>
@@ -55,5 +61,3 @@ declare namespace Makestuff {
         run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): number;
     }
 }
-
-declare module mkdirp {}
