@@ -16,12 +16,13 @@ export interface ISettingsRootDescription {
     isDefault?: boolean;
 }
 
-export interface ISettingsFlags {
-    [key: string]: {
-        description: string;
-        alternative: string;
-        action: (data: any) => void;
-    }
+export interface ISettingsFlags extends Record<string, ISettingsFlag> {
+}
+
+export interface ISettingsFlag {
+    description: string;
+    alternative: string;
+    action: (data: any) => void;
 }
 
 export interface IOutputFileDescription {

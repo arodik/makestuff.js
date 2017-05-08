@@ -2,7 +2,6 @@ import GeneratorShell from "./shell";
 import * as path from "path";
 import * as mockFs from "mock-fs";
 import * as fs from "fs";
-import {IResult} from "../generator/interfaces";
 
 const testDir = path.resolve(__dirname, "../test");
 

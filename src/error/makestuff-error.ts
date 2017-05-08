@@ -1,8 +1,5 @@
 export class MakestuffError {
-    protected name: string;
-
-    constructor(message: string) {
-        this.name = message;
+    constructor(protected name: string) {
         Error.call(this);
         Error.captureStackTrace(this);
     }
