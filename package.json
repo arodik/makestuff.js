@@ -11,16 +11,16 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "@types/node": "7.0.14",
+    "@types/node": "7.0.18",
     "caporal": "0.5.0",
     "mkdirp": "0.5.1",
-    "typescript": "2.2.2"
+    "typescript": "2.3.2"
   },
   "devDependencies": {
-    "@types/jest": "19.2.2",
-    "jest": "19.0.2",
-    "mock-fs": "4.2.0",
-    "ts-jest": "19.0.13"
+    "@types/jest": "19.2.3",
+    "jest": "20.0.0",
+    "mock-fs": "4.3.0",
+    "ts-jest": "20.0.1"
   },
   "jest": {
     "transform": {
