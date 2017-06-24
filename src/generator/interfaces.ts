@@ -27,13 +27,14 @@ export interface ISettingsFlag {
 
 export interface IOutputFileDescription {
     template?: string;
+    templatePath?: string;
     outputName: ((data: IOutputNameData) => string) | string
 }
 
 export interface IOutputNameData {
     name: {
         raw: string;
-        configured: string;
+        default: string;
         camelCase: string;
         pascalCase: string;
         kebabCase: string;
@@ -41,9 +42,4 @@ export interface IOutputNameData {
         snakeCase: string;
         dotCase: string;
     }
-}
-
-export interface IResult {
-    created: Array<string>;
-    errors: Array<string>;
 }
