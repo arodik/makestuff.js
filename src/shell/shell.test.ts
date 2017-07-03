@@ -43,7 +43,7 @@ describe("shell", function () {
             outputFiles: testFiles
         });
 
-        const result = generator.run("component", testComponentPath, [], testDir);
+        const result = generator.run(testDir, "component", testComponentPath);
 
         expect(result.created.length).toBe(testFiles.length);
         expect(result.errors.length).toBe(0);
@@ -94,7 +94,7 @@ describe("shell", function () {
             ]
         });
 
-        const result = generator.run("component", testComponentPath, [], testDir);
+        const result = generator.run(testDir, "component", testComponentPath);
 
         const pathToCreatedFiles = path.resolve(testDir, testComponentPath);
         const textTemplateFileContent = fs.readFileSync(
@@ -124,7 +124,7 @@ describe("shell", function () {
 
         // TODO: throw the typed error
         expect(function() {
-            const result = generator.run("component", testComponentPath, [], testDir);
+            const result = generator.run(testDir, "component", testComponentPath);
         }).toThrowError();
     });
 
@@ -144,7 +144,7 @@ describe("shell", function () {
             ]
         });
 
-        const result = generator.run("component", testComponentPath, [], testDir);
+        const result = generator.run(testDir, "component", testComponentPath);
 
         expect(result.created.length).toBe(1);
 

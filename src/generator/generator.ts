@@ -14,21 +14,21 @@ export default class Generator {
     constructor(private config: ISettings) {
     }
 
-    execute(path: string, options?: Array<string>, root?: string): ExecuteResult {
-        const rootPath = root ? root : process.cwd(),
-            createDirectory = this.config.createDirectory !== false,
-            entityDirPath = Path.dirname(path),
-            rawName = Path.basename(path),
-            entityName = this.normalizeName(rawName),
-            filesToCreate = this.normalizeOutputFiles(rawName),
+    execute(workingDir: string, path: string, options?: Array<string>): ExecuteResult {
+        const createDirectory = this.config.createDirectory !== false,
+            pathToEntityDir = Path.dirname(path),
+            rawEntityName = Path.basename(path),
+            normalizedEntityName = this.normalizeName(rawEntityName),
             result: ExecuteResult = {
                 created: [],
                 errors: []
             };
 
+        const filesToCreate = this.normalizeOutputFiles(rawEntityName);
+
         const absoluteEntityDirPath = createDirectory
-            ? Path.resolve(rootPath, entityDirPath, entityName)
-            : Path.resolve(rootPath, entityDirPath);
+            ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
+            : Path.resolve(workingDir, pathToEntityDir);
 
         filesToCreate.forEach(function(file) {
             const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.outputName),

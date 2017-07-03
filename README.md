@@ -11,10 +11,11 @@ Tiny scaffolding tool for your project
 // projectRoot/makestuff.js
 const componentGenerator = {
    name: "component", // name for your command
-   root: "./app",     // the working directory for command
+   root: "./app",     // the working directory for command. Relative to the process' working directory
    // many roots
    // root: [{name: "app", path: "./app", isDefault: true}, {name: "ui-kit", path: "../../ui-kit"}]
-   templatesRoot: "./templates", // tells the generator where to find the templates
+   templatesRoot: "./templates", // tells the generator where to find the templates, 
+                                 // can be absolute or relative to the appRoot
    namingConvention: "PascalCase", // by default
    flags: { // CLI params for your command
        "-s": {

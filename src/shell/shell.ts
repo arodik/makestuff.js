@@ -10,7 +10,7 @@ export default class GeneratorShell {
         this.generators.push(settings);
     }
 
-    run(generatorName: string, path: string, options?: Array<string>, projectRoot?: string): ExecuteResult {
+    run(workingDir: string, generatorName: string, path: string, options?: Array<string>): ExecuteResult {
         const generatorSettings = this.findGeneratorSettingsByName(generatorName);
         if (!generatorSettings) {
             throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);
@@ -22,7 +22,7 @@ export default class GeneratorShell {
 
         const generator = new Generator(generatorSettings);
 
-        return generator.execute(path, options, projectRoot);
+        return generator.execute(workingDir, path, options);
     }
 
     private checkNamingConvention(convention?: string): boolean {
