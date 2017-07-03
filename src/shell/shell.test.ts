@@ -3,7 +3,12 @@ import * as path from "path";
 import * as fs from "fs";
 import FsExtension from "../extensions/fs";
 
-const testDir = path.resolve(__dirname, "../test-files");
+const testDir = path.resolve(__dirname, "../test-files"),
+    absoluteDir = "/tmp/makestuff";
+
+function getAbsPathTo(destination: string): string {
+    return path.resolve(absoluteDir, destination);
+}
 
 describe("shell", function() {
     let generator: GeneratorShell;
@@ -13,8 +18,13 @@ describe("shell", function() {
         generator = new GeneratorShell();
     });
 
+    afterEach(function() {
+        FsExtension.deleteFolderRecursive(testDir);
+        FsExtension.deleteFolderRecursive(absoluteDir);
+    });
+
     test("can create empty files with proper names", function() {
-        const testComponentPath = "/tmp/makestuff/test/TestComponent",
+        const testComponentPath = getAbsPathTo("test/TestComponent"),
             testFiles = [
                 "index.test",
                 { outputName: "testFile.test" },
@@ -48,8 +58,14 @@ describe("shell", function() {
     test("can create files by template", function() {
         const testTemplate = "export default class <%= data.name.default %> {}",
             expectedTemplate = "export default class TestComponent {}",
-            textTemplateFile =  { outputName: "text-template.test", template: testTemplate },
-            absolutePathFile = { outputName: "absolute.test", templatePath: "/tmp/makestuff/absolute-test.tpl" };
+            textTemplateFile =  {
+                outputName: "text-template.test",
+                template: testTemplate
+            },
+            absolutePathFile = {
+                outputName: "absolute.test",
+                templatePath: getAbsPathTo("absolute-test.tpl")
+            };
 
         FsExtension.writeFile(absolutePathFile.templatePath, testTemplate);
 
