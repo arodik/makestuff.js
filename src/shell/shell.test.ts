@@ -10,31 +10,31 @@ function getAbsPathTo(destination: string): string {
     return path.resolve(absoluteDir, destination);
 }
 
-describe("shell", function() {
+describe("shell", function () {
     let generator: GeneratorShell;
     const testComponentPath = "components/TestComponent";
 
-    beforeEach(function() {
+    beforeEach(function () {
         generator = new GeneratorShell();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         FsExtension.deleteFolderRecursive(testDir);
         FsExtension.deleteFolderRecursive(absoluteDir);
     });
 
-    test("can create empty files with proper names", function() {
+    test("can create empty files with proper names", function () {
         const testComponentPath = getAbsPathTo("test/TestComponent"),
             testFiles = [
                 "index.test",
-                { outputName: "testFile.test" },
-                { outputName: (data) => `raw.${data.name.raw}.test` },
-                { outputName: (data) => `cc.${data.name.camelCase}.test` },
-                { outputName: (data) => `pc.${data.name.pascalCase}.test` },
-                { outputName: (data) => `kc.${data.name.kebabCase}.test` },
-                { outputName: (data) => `tc.${data.name.trainCase}.test` },
-                { outputName: (data) => `sc.${data.name.snakeCase}.test` },
-                { outputName: (data) => `dc.${data.name.dotCase}.test` },
+                {outputName: "testFile.test"},
+                {outputName: (data) => `raw.${data.name.raw}.test`},
+                {outputName: (data) => `cc.${data.name.camelCase}.test`},
+                {outputName: (data) => `pc.${data.name.pascalCase}.test`},
+                {outputName: (data) => `kc.${data.name.kebabCase}.test`},
+                {outputName: (data) => `tc.${data.name.trainCase}.test`},
+                {outputName: (data) => `sc.${data.name.snakeCase}.test`},
+                {outputName: (data) => `dc.${data.name.dotCase}.test`},
             ];
 
         generator.setupGenerator({
@@ -48,17 +48,32 @@ describe("shell", function() {
         expect(result.created.length).toBe(testFiles.length);
         expect(result.errors.length).toBe(0);
 
-        const resultFiles = fs.readdirSync(path.resolve(testDir, testComponentPath));
+        result.created.forEach(function (filePath) {
+            expect(fs.existsSync(filePath)).toBeTruthy();
+        });
 
-        expect(resultFiles.length).toBe(testFiles.length);
+        const properFilenames = [
+            "index.test",
+            "testFile.test",
+            "raw.TestComponent.test",
+            "cc.testComponent.test",
+            "pc.TestComponent.test",
+            "kc.test-component.test",
+            "tc.Test-Component.test",
+            "sc.test_component.test",
+            "dc.test.component.test",
+        ]
 
-        // TODO: make file names check
+        properFilenames.forEach(function (fileName) {
+            const pathToFile = path.resolve(testComponentPath, fileName);
+            expect(fs.existsSync(pathToFile)).toBeTruthy();
+        })
     });
 
-    test("can create files by template", function() {
+    test("can create files by template", function () {
         const testTemplate = "export default class <%= data.name.default %> {}",
             expectedTemplate = "export default class TestComponent {}",
-            textTemplateFile =  {
+            textTemplateFile = {
                 outputName: "text-template.test",
                 template: testTemplate
             },
@@ -95,23 +110,23 @@ describe("shell", function() {
         expect(absolutePathFileContent).toBe(expectedTemplate);
     });
 
-    test("must throw the error if template file doesn't exists", function() {
+    test("must throw the error if template file doesn't exists", function () {
 
     });
 
-    test("can get additional template variables from config file", function() {
+    test("can get additional template variables from config file", function () {
         const testContent = "111";
 
         generator.setupGenerator({
             name: "component",
             root: testDir,
-            templateVars: function(input, predefinedSettings) {
+            templateVars: function (input, predefinedSettings) {
                 return {
                     testVar: testContent
                 }
             },
             outputFiles: [
-                { outputName: "additional-fields.test", template: "<%- custom.testVar %>"},
+                {outputName: "additional-fields.test", template: "<%- custom.testVar %>"},
             ]
         });
 
