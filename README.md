@@ -11,9 +11,7 @@ Tiny scaffolding tool for your project
 // projectRoot/makestuff.js
 const componentGenerator = {
    name: "component", // name for your command
-   root: "./app",     // the working directory for command. Relative to the process' working directory
-   // many roots
-   // root: [{name: "app", path: "./app", isDefault: true}, {name: "ui-kit", path: "../../ui-kit"}]
+   root: "./app", // a working directory for command. Relative to the config location
    templatesRoot: "./templates", // tells the generator where to find the templates, 
                                  // can be absolute or relative to the appRoot
    namingConvention: "PascalCase", // by default
@@ -40,8 +38,12 @@ const componentGenerator = {
    // Tells the generator where to put the result files
    outputFiles: [
        {
-           template: "./templates/component.tpl",
+           templatePath: "./templates/component.tpl",
            outputName: data => `${data.dashedName}.component.ts`
+       },
+       {
+           template: "some file content",
+           outputName: data => `${data.dashedName}.ts`
        },
        {
            outputName: data => `${data.dashedName}.html` // just create emplty file

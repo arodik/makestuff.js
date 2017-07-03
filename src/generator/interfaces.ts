@@ -2,19 +2,14 @@ export type namingConventions = "camelCase" | "pascalCase" | "kebabCase" | "trai
 
 export interface ISettings {
     name: string;
-    root: string | Array<ISettingsRootDescription>;
+    root?: string;
+    templatesRoot?: string;
     namingConvention?: namingConventions;
     createDirectory?: boolean;
     flags?: ISettingsFlags;
     // TODO: rename the function name and args
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     outputFiles: Array<string | IOutputFileDescription>
-}
-
-export interface ISettingsRootDescription {
-    name: string;
-    path: string;
-    isDefault?: boolean;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

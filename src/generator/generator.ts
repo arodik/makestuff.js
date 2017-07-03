@@ -5,7 +5,7 @@ import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import {IOutputFileDescription, IOutputNameData, ISettings} from "./interfaces";
 
-export type ExecuteResult = {
+export type ExecutionResult = {
     created: Array<string>;
     errors: Array<string>;
 };
@@ -14,17 +14,17 @@ export default class Generator {
     constructor(private config: ISettings) {
     }
 
-    execute(workingDir: string, path: string, options?: Array<string>): ExecuteResult {
+    execute(workingDir: string, path: string, options?: Array<string>): ExecutionResult {
         const createDirectory = this.config.createDirectory !== false,
             pathToEntityDir = Path.dirname(path),
             rawEntityName = Path.basename(path),
             normalizedEntityName = this.normalizeName(rawEntityName),
-            result: ExecuteResult = {
+            result: ExecutionResult = {
                 created: [],
                 errors: []
             };
 
-        const filesToCreate = this.normalizeOutputFiles(rawEntityName);
+        const filesToCreate = this.normalizeOutputFiles(workingDir, rawEntityName);
 
         const absoluteEntityDirPath = createDirectory
             ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
@@ -46,7 +46,7 @@ export default class Generator {
     }
 
     // TODO: rename this func
-    private normalizeOutputFiles(generatorName: string): Array<IOutputFileDescription> {
+    private normalizeOutputFiles(workingDir: string, generatorName: string): Array<IOutputFileDescription> {
         const generatorData = this.getGeneratorData(generatorName);
 
         return this.config.outputFiles.map((file) => {
@@ -60,7 +60,7 @@ export default class Generator {
                 }
             }
 
-            const result = Object.assign({}, file);
+            const result = {...file};
 
             const customData = typeof this.config.templateVars === "function"
                 ? this.config.templateVars({}, generatorData)
@@ -79,12 +79,29 @@ export default class Generator {
             if (file.template) {
                 result.template = ejs.render(file.template, templateData);
             } else if (file.templatePath) {
-                const rawTpl = fs.readFileSync(file.templatePath, "UTF-8");
+                const pathToTemplate = this.normalizePathToTemplate(workingDir, file.templatePath);
+                const rawTpl = fs.readFileSync(pathToTemplate, "UTF-8");
+
                 result.template = ejs.render(rawTpl, templateData);
             }
 
             return result;
         });
+    }
+
+    private normalizePathToTemplate(workingDir: string, templatePath: string): string {
+        const firstChar = templatePath[0];
+
+        if (firstChar === "/") {
+            // don't use the templatesRoot or the app root if the path is absolute
+            return templatePath;
+        } else {
+            if (this.config.templatesRoot) {
+                return Path.resolve(workingDir, this.config.root, this.config.templatesRoot, templatePath);
+            } else {
+                return Path.resolve(workingDir, this.config.root, templatePath);
+            }
+        }
     }
 
     // TODO: rename this func

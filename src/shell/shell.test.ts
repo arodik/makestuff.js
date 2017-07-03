@@ -3,8 +3,13 @@ import * as path from "path";
 import * as fs from "fs";
 import FsExtension from "../extensions/fs";
 
-const testDir = path.resolve(__dirname, "../test-files"),
-    absoluteDir = "/tmp/makestuff";
+const dirWithTests = path.resolve(__dirname, "../../test-files"),
+    testWorkingDir = dirWithTests,
+    absoluteDir = "/tmp/makestuff",
+    testComponentPath = "components/TestComponent",
+    simpleTemplate = "export default class <%= data.name.default %> {}",
+    compiledSimpleTemplate = "export default class TestComponent {}",
+    templatesRootPath = "./templates";
 
 function getAbsPathTo(destination: string): string {
     return path.resolve(absoluteDir, destination);
@@ -12,14 +17,13 @@ function getAbsPathTo(destination: string): string {
 
 describe("shell", function () {
     let generator: GeneratorShell;
-    const testComponentPath = "components/TestComponent";
 
     beforeEach(function () {
         generator = new GeneratorShell();
     });
 
     afterEach(function () {
-        FsExtension.deleteFolderRecursive(testDir);
+        FsExtension.deleteFolderRecursive(dirWithTests);
         FsExtension.deleteFolderRecursive(absoluteDir);
     });
 
@@ -39,11 +43,10 @@ describe("shell", function () {
 
         generator.setupGenerator({
             name: "component",
-            root: testDir,
             outputFiles: testFiles
         });
 
-        const result = generator.run(testDir, "component", testComponentPath);
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
 
         expect(result.created.length).toBe(testFiles.length);
         expect(result.errors.length).toBe(0);
@@ -70,50 +73,73 @@ describe("shell", function () {
         })
     });
 
-    test("can create files by template", function () {
-        const testTemplate = "export default class <%= data.name.default %> {}",
-            expectedTemplate = "export default class TestComponent {}",
-            textTemplateFile = {
-                outputName: "text-template.test",
-                template: testTemplate
-            },
-            absolutePathFile = {
+    test("can specify the custom command's root", function() {
+
+    });
+
+    test("can create files using template specified by absolute path", function () {
+        const absolutePathFile = {
                 outputName: "absolute.test",
                 templatePath: getAbsPathTo("absolute-test.tpl")
             };
 
-        FsExtension.writeFile(absolutePathFile.templatePath, testTemplate);
+        FsExtension.writeFile(absolutePathFile.templatePath, simpleTemplate);
 
         generator.setupGenerator({
             name: "component",
-            root: testDir,
-            outputFiles: [
-                textTemplateFile,
-                absolutePathFile,
-                // TODO: make test for relative path template (relative to the config file)
-            ]
+            templatesRoot: templatesRootPath,
+            outputFiles: [absolutePathFile]
         });
 
-        const result = generator.run(testDir, "component", testComponentPath);
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
+        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
 
-        const pathToCreatedFiles = path.resolve(testDir, testComponentPath);
-        const textTemplateFileContent = fs.readFileSync(
-            path.resolve(pathToCreatedFiles, textTemplateFile.outputName),
-            "UTF-8"
-        );
-        const absolutePathFileContent = fs.readFileSync(
-            path.resolve(pathToCreatedFiles, textTemplateFile.outputName),
-            "UTF-8"
-        );
+        expect(resultFileContent).toBe(compiledSimpleTemplate);
+    });
 
-        expect(textTemplateFileContent).toBe(expectedTemplate);
-        expect(absolutePathFileContent).toBe(expectedTemplate);
+    test("can create files using template specified by relative path", function () {
+        const relativePathFile = {
+                outputName: "relative.test",
+                templatePath: "./absolute-test.tpl"
+            };
+
+        const properPathToTemplate = path.resolve(testWorkingDir, templatesRootPath, relativePathFile.templatePath);
+        FsExtension.writeFile(properPathToTemplate, simpleTemplate);
+
+        generator.setupGenerator({
+            name: "component",
+            templatesRoot: templatesRootPath,
+            outputFiles: [relativePathFile]
+        });
+
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
+
+        const pathToCreatedFiles = path.resolve(dirWithTests, testComponentPath);
+        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+
+        expect(resultFileContent).toBe(compiledSimpleTemplate);
+    });
+
+    test("can create files using template as string", function () {
+        const fileFromStringTemplate = {
+            outputName: "from-string-template.test",
+            template: simpleTemplate
+        };
+
+        generator.setupGenerator({
+            name: "component",
+            outputFiles: [fileFromStringTemplate]
+        });
+
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
+        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+
+        expect(resultFileContent).toBe(compiledSimpleTemplate);
     });
 
     test("must throw the error if template file doesn't exists", function () {
         generator.setupGenerator({
             name: "component",
-            root: testDir,
             outputFiles: [
                 {
                     outputName: "absolute.test",
@@ -124,7 +150,7 @@ describe("shell", function () {
 
         // TODO: throw the typed error
         expect(function() {
-            const result = generator.run(testDir, "component", testComponentPath);
+            const result = generator.run(dirWithTests, "component", testComponentPath);
         }).toThrowError();
     });
 
@@ -133,7 +159,6 @@ describe("shell", function () {
 
         generator.setupGenerator({
             name: "component",
-            root: testDir,
             templateVars: function (input, predefinedSettings) {
                 return {
                     testVar: testContent
@@ -144,7 +169,7 @@ describe("shell", function () {
             ]
         });
 
-        const result = generator.run(testDir, "component", testComponentPath);
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
 
         expect(result.created.length).toBe(1);
 

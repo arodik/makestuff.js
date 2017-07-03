@@ -1,4 +1,4 @@
-import Generator, {ExecuteResult} from "../generator/generator";
+import Generator, {ExecutionResult} from "../generator/generator";
 import {ISettings as IGeneratorSettings} from "../generator/interfaces";
 import {WrongGeneratorNameError} from "./error/wrong-generator-name";
 import {WrongNameConventionError} from "./error/wrong-name-convention";
@@ -10,10 +10,14 @@ export default class GeneratorShell {
         this.generators.push(settings);
     }
 
-    run(workingDir: string, generatorName: string, path: string, options?: Array<string>): ExecuteResult {
+    run(workingDir: string, generatorName: string, path: string, options?: Array<string>): ExecutionResult {
         const generatorSettings = this.findGeneratorSettingsByName(generatorName);
         if (!generatorSettings) {
             throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);
+        }
+
+        if (!generatorSettings.root) {
+            generatorSettings.root = "./";
         }
 
         if (!this.checkNamingConvention(generatorSettings.namingConvention)) {
