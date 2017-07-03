@@ -111,7 +111,21 @@ describe("shell", function () {
     });
 
     test("must throw the error if template file doesn't exists", function () {
+        generator.setupGenerator({
+            name: "component",
+            root: testDir,
+            outputFiles: [
+                {
+                    outputName: "absolute.test",
+                    templatePath: getAbsPathTo("non-existing-template.tpl")
+                }
+            ]
+        });
 
+        // TODO: throw the typed error
+        expect(function() {
+            const result = generator.run("component", testComponentPath, [], testDir);
+        }).toThrowError();
     });
 
     test("can get additional template variables from config file", function () {
