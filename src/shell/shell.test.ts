@@ -7,6 +7,7 @@ const testDir = path.resolve(__dirname, "../test-files");
 
 describe("shell", function() {
     let generator: GeneratorShell;
+    const testComponentPath = "components/TestComponent";
 
     beforeEach(function() {
         generator = new GeneratorShell();
@@ -45,8 +46,7 @@ describe("shell", function() {
     });
 
     test("can create files by template", function() {
-        const testComponentPath = "components/TestComponent",
-            testTemplate = "export default class <%= data.name.default %> {}",
+        const testTemplate = "export default class <%= data.name.default %> {}",
             expectedTemplate = "export default class TestComponent {}",
             textTemplateFile =  { outputName: "text-template.test", template: testTemplate },
             absolutePathFile = { outputName: "absolute.test", templatePath: "/tmp/makestuff/absolute-test.tpl" };
@@ -84,6 +84,30 @@ describe("shell", function() {
     });
 
     test("can get additional template variables from config file", function() {
+        const testContent = "111";
 
+        generator.setupGenerator({
+            name: "component",
+            root: testDir,
+            templateVars: function(input, predefinedSettings) {
+                return {
+                    testVar: testContent
+                }
+            },
+            outputFiles: [
+                { outputName: "additional-fields.test", template: "<%- custom.testVar %>"},
+            ]
+        });
+
+        const result = generator.run("component", testComponentPath, [], testDir);
+
+        expect(result.created.length).toBe(1);
+
+        const content = fs.readFileSync(
+            result.created[0],
+            "UTF-8"
+        );
+
+        expect(content).toBe(testContent);
     });
 });

@@ -6,7 +6,8 @@ export interface ISettings {
     namingConvention?: namingConventions;
     createDirectory?: boolean;
     flags?: ISettingsFlags;
-    templateVars?: (input: any, predefinedSettings: any) => Object;
+    // TODO: rename the function name and args
+    templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     outputFiles: Array<string | IOutputFileDescription>
 }
 

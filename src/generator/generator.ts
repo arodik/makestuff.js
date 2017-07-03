@@ -45,10 +45,11 @@ export default class Generator {
         return result;
     }
 
+    // TODO: rename this func
     private normalizeOutputFiles(generatorName: string): Array<IOutputFileDescription> {
         const generatorData = this.getGeneratorData(generatorName);
 
-        return this.config.outputFiles.map(function outputFilesNormalizer(file) {
+        return this.config.outputFiles.map((file) => {
             if (typeof file === "string") {
                 return {
                     outputName: file
@@ -61,25 +62,32 @@ export default class Generator {
 
             const result = Object.assign({}, file);
 
+            const customData = typeof this.config.templateVars === "function"
+                ? this.config.templateVars({}, generatorData)
+                : {};
+
+            const templateData = {
+                // TODO: rename this key
+                data: generatorData,
+                custom: customData
+            };
+
             if (typeof file.outputName === "function") {
                 result.outputName = file.outputName(generatorData);
             }
 
             if (file.template) {
-                result.template = ejs.render(file.template, {
-                    data: generatorData
-                });
+                result.template = ejs.render(file.template, templateData);
             } else if (file.templatePath) {
                 const rawTpl = fs.readFileSync(file.templatePath, "UTF-8");
-                result.template = ejs.render(rawTpl, {
-                    data: generatorData
-                });
+                result.template = ejs.render(rawTpl, templateData);
             }
 
             return result;
         });
     }
 
+    // TODO: rename this func
     private getGeneratorData(name: string): IOutputNameData {
         return {
             name: {
