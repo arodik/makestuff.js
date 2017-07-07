@@ -1,6 +1,8 @@
 # makestuff.js
 Tiny scaffolding tool for your project
 
+[![Build Status](https://travis-ci.org/arodik/makestuff.js.svg?branch=master)](https://travis-ci.org/arodik/makestuff.js)
+
 **!! Currently under developing !! Please don't use this until the first release**
 
 ----------------
