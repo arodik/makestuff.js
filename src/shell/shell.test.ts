@@ -65,12 +65,12 @@ describe("shell", function () {
             "tc.Test-Component.test",
             "sc.test_component.test",
             "dc.test.component.test",
-        ]
+        ];
 
         properFilenames.forEach(function (fileName) {
             const pathToFile = path.resolve(testComponentPath, fileName);
             expect(fs.existsSync(pathToFile)).toBeTruthy();
-        })
+        });
     });
 
     test("can specify the custom command's root", function() {
@@ -162,7 +162,7 @@ describe("shell", function () {
             templateVars: function (input, predefinedSettings) {
                 return {
                     testVar: testContent
-                }
+                };
             },
             outputFiles: [
                 {outputName: "additional-fields.test", template: "<%- custom.testVar %>"},

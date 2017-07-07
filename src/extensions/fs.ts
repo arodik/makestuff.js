@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "fs";
+import * as Path from "path";
+import * as Fs from "fs";
 import * as mkdirp from "mkdirp";
 
 export default class FsExtension {
@@ -9,24 +9,24 @@ export default class FsExtension {
             return;
         }
 
-        mkdirp.sync(path.dirname(filePath));
-        fs.writeFileSync(filePath, content);
+        mkdirp.sync(Path.dirname(filePath));
+        Fs.writeFileSync(filePath, content);
     }
 
     static deleteFolderRecursive(path: string) {
-        if (fs.existsSync(path)) {
-            fs.readdirSync(path).forEach(function (file, index) {
+        if (Fs.existsSync(path)) {
+            Fs.readdirSync(path).forEach(function (file, index) {
                 const curPath = `${path}/${file}`;
 
-                if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                if (Fs.lstatSync(curPath).isDirectory()) { // recurse
                     FsExtension.deleteFolderRecursive(curPath);
                 } else { // delete file
-                    fs.unlinkSync(curPath);
+                    Fs.unlinkSync(curPath);
                 }
             });
 
-            fs.rmdirSync(path);
+            Fs.rmdirSync(path);
         }
-    };
+    }
 
 }

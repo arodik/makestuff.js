@@ -9,7 +9,7 @@ export interface ISettings {
     flags?: ISettingsFlags;
     // TODO: rename the function name and args
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
-    outputFiles: Array<string | IOutputFileDescription>
+    outputFiles: Array<string | IOutputFileDescription>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {
@@ -24,7 +24,7 @@ export interface ISettingsFlag {
 export interface IOutputFileDescription {
     template?: string;
     templatePath?: string;
-    outputName: ((data: IOutputNameData) => string) | string
+    outputName: ((data: IOutputNameData) => string) | string;
 }
 
 export interface IOutputNameData {
@@ -37,5 +37,5 @@ export interface IOutputNameData {
         trainCase: string;
         snakeCase: string;
         dotCase: string;
-    }
+    };
 }

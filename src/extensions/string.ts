@@ -38,7 +38,7 @@ export default class StringExtension {
     static pascalCase(target: string): string {
         return StringExtension.ucfirst(
             StringExtension.camelCase(target)
-        )
+        );
     }
 
     static kebabCase(target: string): string {

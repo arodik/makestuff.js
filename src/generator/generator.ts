@@ -53,11 +53,11 @@ export default class Generator {
             if (typeof file === "string") {
                 return {
                     outputName: file
-                }
+                };
             } else if (typeof file === "function") {
                 return {
                     outputName: file(generatorData)
-                }
+                };
             }
 
             const result = {...file};
@@ -117,7 +117,7 @@ export default class Generator {
                 snakeCase: StringExtension.snakeCase(name),
                 dotCase: StringExtension.dotCase(name)
             }
-        }
+        };
     }
 
     private normalizeName(name: string): string {
