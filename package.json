@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "dist/shell/shell.js",
   "scripts": {
-    "start": "npm run lint && npm run ts:watch & npm run lint:watch & wait",
+    "start": "npm run lint && npm-run-all -p -r ts:watch lint:watch",
     "lint": "tslint -p ./ --force --format stylish",
     "ts:watch": "tsc --watch --pretty",
     "lint:watch": "onchange './src/**/*.ts' -d 300 -- npm run lint",
