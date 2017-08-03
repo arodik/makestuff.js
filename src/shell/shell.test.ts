@@ -28,7 +28,7 @@ describe("shell", function () {
     });
 
     test("can create empty files with proper names", function () {
-        const testComponentPath = getAbsPathTo("test/TestComponent"),
+        const testCommandPath = getAbsPathTo("test/TestComponent"),
             testFiles = [
                 "index.test",
                 {outputName: "testFile.test"},
@@ -46,7 +46,7 @@ describe("shell", function () {
             outputFiles: testFiles
         });
 
-        const result = generator.run(testWorkingDir, "component", testComponentPath);
+        const result = generator.run(testWorkingDir, "component", testCommandPath);
 
         expect(result.created.length).toBe(testFiles.length);
         expect(result.errors.length).toBe(0);
@@ -68,7 +68,7 @@ describe("shell", function () {
         ];
 
         properFilenames.forEach(function (fileName) {
-            const pathToFile = path.resolve(testComponentPath, fileName);
+            const pathToFile = path.resolve(testCommandPath, fileName);
             expect(fs.existsSync(pathToFile)).toBeTruthy();
         });
     });
