@@ -17,22 +17,6 @@ const componentGenerator = {
    templatesRoot: "./templates", // tells the generator where to find the templates, 
                                  // can be absolute or relative to the appRoot
    namingConvention: "PascalCase", // by default
-   flags: { // CLI params for your command
-       "-s": {
-           description: "generate style",
-           alternative: "--style",
-           action: function(data, actions) {
-               actions.makeFile("_index.scss");
-           }
-       },
-       "-c": {
-           description: "generate config",
-           alternative: "--config",
-           action: function(data, actions) {
-               actions.makeFileFromTemplate("config.tpl", `${data.dashedName}.config.js`);
-           }
-       }
-   },
    // Create some extra data for the command. They will be exposed to the templates
    templateVars: function(input, predefinedSettings) {
        return predefinedSettings;
