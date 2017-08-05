@@ -22,7 +22,7 @@
     "typescript": "2.4.2"
   },
   "devDependencies": {
-    "@types/jest": "20.0.6",
+    "@types/jest": "20.0.9",
     "jest": "20.0.4",
     "npm-run-all": "4.0.2",
     "onchange": "3.2.1",
