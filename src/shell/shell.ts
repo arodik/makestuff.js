@@ -16,10 +16,6 @@ export default class GeneratorShell {
             throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);
         }
 
-        if (!generatorSettings.root) {
-            generatorSettings.root = "./";
-        }
-
         if (!this.checkNamingConvention(generatorSettings.namingConvention)) {
             throw new WrongNameConventionError(`Invalid naming convention ${generatorSettings.namingConvention}`);
         }

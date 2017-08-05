@@ -14,7 +14,6 @@ Tiny scaffolding tool for your project
 // projectRoot/makestuff.js
 const componentGenerator = {
    name: "component", // name for your command
-   root: "./app", // a working directory for command. Relative to the config location
    templatesRoot: "./templates", // tells the generator where to find the templates, 
                                  // can be absolute or relative to the appRoot
    namingConvention: "PascalCase", // by default

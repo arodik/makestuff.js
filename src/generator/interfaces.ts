@@ -2,7 +2,6 @@ export type namingConventions = "camelCase" | "pascalCase" | "kebabCase" | "trai
 
 export interface ISettings {
     name: string;
-    root?: string;
     templatesRoot?: string;
     namingConvention?: namingConventions;
     createDirectory?: boolean;

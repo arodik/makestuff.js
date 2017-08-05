@@ -97,9 +97,9 @@ export default class Generator {
             return templatePath;
         } else {
             if (this.config.templatesRoot) {
-                return Path.resolve(workingDir, this.config.root, this.config.templatesRoot, templatePath);
+                return Path.resolve(workingDir, this.config.templatesRoot, templatePath);
             } else {
-                return Path.resolve(workingDir, this.config.root, templatePath);
+                return Path.resolve(workingDir, templatePath);
             }
         }
     }

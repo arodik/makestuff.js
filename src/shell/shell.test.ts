@@ -73,10 +73,6 @@ describe("shell", function () {
         });
     });
 
-    test("can specify the custom command's root", function() {
-
-    });
-
     test("can create files using template specified by absolute path", function () {
         const absolutePathFile = {
                 outputName: "absolute.test",
