@@ -4,6 +4,7 @@ import * as ejs from "ejs";
 import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import {IOutputFileDescription, IOutputNameData, ISettings} from "./interfaces";
+import PathExtension from "../extensions/path";
 
 export type ExecutionResult = {
     created: Array<string>;
@@ -16,8 +17,9 @@ export default class Generator {
 
     execute(workingDir: string, path: string, options?: Array<string>): ExecutionResult {
         const createDirectory = this.config.createDirectory !== false,
-            pathToEntityDir = Path.dirname(path),
-            rawEntityName = Path.basename(path),
+            normalizedPath = PathExtension.trimLeadingSlashes(path),
+            pathToEntityDir = Path.dirname(normalizedPath),
+            rawEntityName = Path.basename(normalizedPath),
             normalizedEntityName = this.normalizeName(rawEntityName),
             result: ExecutionResult = {
                 created: [],
