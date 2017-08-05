@@ -14,6 +14,7 @@ Tiny scaffolding tool for your project
 // projectRoot/makestuff.js
 const componentGenerator = {
    name: "component", // name for your command
+   description: "Generate the component",
    templatesRoot: "./templates", // tells the generator where to find the templates, 
                                  // can be absolute or relative to the appRoot
    namingConvention: "PascalCase", // by default
@@ -24,7 +25,7 @@ const componentGenerator = {
    // Tells the generator where to put the result files
    outputFiles: [
        {
-           templatePath: "./templates/component.tpl",
+           templatePath: "./templates/component.ejs",
            outputName: data => `${data.dashedName}.component.ts`
        },
        {
