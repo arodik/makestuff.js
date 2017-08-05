@@ -29,4 +29,20 @@ export default class FsExtension {
         }
     }
 
+    static locateFileRecursively(fileName: string, startPath: string): string | null {
+        // Search for file in the startPath
+        const fullPath = Path.resolve(startPath, fileName);
+        if (Fs.existsSync(fullPath)) {
+            return fullPath;
+        }
+
+        // If we can't find the file - Get parent folder and try to search again
+        const parentPath = Path.dirname(startPath);
+        if (startPath === parentPath) {
+            return null; // We've reached the root and haven't found the file
+        }
+
+        return FsExtension.locateFileRecursively(fileName, parentPath);
+    }
+
 }
