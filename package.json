@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/jest": "^20.0.8",
+    "chalk": "^2.1.0",
     "jest": "^21.0.0",
     "npm-run-all": "^4.1.1",
     "onchange": "^3.2.1",

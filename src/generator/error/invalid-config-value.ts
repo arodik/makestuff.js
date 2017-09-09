@@ -1,4 +1,4 @@
 import {MakestuffError} from "../../error/makestuff-error";
 
-export class WrongNameConventionError extends MakestuffError {
+export class InvalidConfigValueError extends MakestuffError {
 }

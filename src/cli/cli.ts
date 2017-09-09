@@ -1,10 +1,10 @@
-import {ISettings} from "../generator/interfaces";
+import {IGeneratorConfig} from "../generator/interfaces";
 import GeneratorShell from "../shell/shell";
 
 export default class MakestuffCli {
     private shell: GeneratorShell;
 
-    constructor(private workdir: string, private configs: Array<ISettings>) {
+    constructor(private workdir: string, private configs: Array<IGeneratorConfig>) {
         this.setupShell(this.configs);
     }
 
@@ -13,7 +13,7 @@ export default class MakestuffCli {
         cliEngine.parse(process.argv);
     }
 
-    private setupShell(configs: Array<ISettings>) {
+    private setupShell(configs: Array<IGeneratorConfig>) {
         this.shell = new GeneratorShell();
 
         configs.forEach((config) => {

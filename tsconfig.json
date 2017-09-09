@@ -6,6 +6,7 @@
     "strictNullChecks": true,
     "preserveConstEnums": true,
     "importHelpers": true,
+    "experimentalDecorators": true,
     "outDir": "dist"
   },
   "include": [

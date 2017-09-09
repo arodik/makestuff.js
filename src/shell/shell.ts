@@ -1,45 +1,28 @@
 import Generator, {ExecutionResult} from "../generator/generator";
-import {ISettings as IGeneratorSettings} from "../generator/interfaces";
 import {WrongGeneratorNameError} from "./error/wrong-generator-name";
-import {WrongNameConventionError} from "./error/wrong-name-convention";
+import {IGeneratorConfig} from "../generator/interfaces";
+import GeneratorConfig from "../generator/generator-config";
 
 export default class GeneratorShell {
-    private generators: Array<IGeneratorSettings> = [];
+    private generators: Array<Generator> = [];
 
-    setupGenerator(settings: IGeneratorSettings) {
-        this.generators.push(settings);
+    setupGenerator(settings: IGeneratorConfig) {
+        const strictConfig = new GeneratorConfig(settings);
+        this.generators.push(new Generator(strictConfig));
     }
 
     run(workingDir: string, generatorName: string, path: string, options?: Array<string>): ExecutionResult {
-        const generatorSettings = this.findGeneratorSettingsByName(generatorName);
-        if (!generatorSettings) {
+        const generator = this.findGeneratorByName(generatorName);
+        if (!generator) {
             throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);
         }
-
-        if (!this.checkNamingConvention(generatorSettings.namingConvention)) {
-            throw new WrongNameConventionError(`Invalid naming convention ${generatorSettings.namingConvention}`);
-        }
-
-        const generator = new Generator(generatorSettings);
 
         return generator.execute(workingDir, path, options);
     }
 
-    private checkNamingConvention(convention?: string): boolean {
-        if (convention === undefined) {
-            return true;
-        }
-
-        const validNamingValues = [
-            "camelCase", "pascalCase", "kebabCase", "trainCase", "snakeCase", "dotCase"
-        ];
-
-        return validNamingValues.indexOf(convention) !== -1;
-    }
-
-    private findGeneratorSettingsByName(id: string): IGeneratorSettings | null {
+    private findGeneratorByName(id: string): Generator | null {
         const searchResult = this.generators.find(function(generator) {
-            return generator.name === id;
+            return generator.config.name === id;
         });
 
         return searchResult || null;

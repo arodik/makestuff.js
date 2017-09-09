@@ -1,15 +1,34 @@
-export type namingConventions = "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
+export type NamingConvention = "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
 
-export interface ISettings {
+export type RootDescription = {
     name: string;
+    path: string;
+    default?: boolean;
+};
+
+export interface IGeneratorConfig {
+    name: string;
+    root?: string | Array<RootDescription>;
     description?: string;
     templatesRoot?: string;
-    namingConvention?: namingConventions;
+    namingConvention?: NamingConvention;
     createDirectory?: boolean;
     flags?: ISettingsFlags;
     // TODO: rename the function name and args
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     outputFiles: Array<string | IOutputFileDescription>;
+}
+
+export interface IStrictGeneratorConfig extends IGeneratorConfig {
+    root: Array<RootDescription>;
+    description: string;
+    templatesRoot: string;
+    namingConvention: NamingConvention;
+    createDirectory: boolean;
+    flags: ISettingsFlags;
+    // TODO: rename the function name and args
+    templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
+    outputFiles: Array<IOutputFileDescription>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

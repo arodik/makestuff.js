@@ -3,8 +3,8 @@ import * as fs from "fs";
 import * as ejs from "ejs";
 import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
-import {IOutputFileDescription, IOutputNameData, ISettings} from "./interfaces";
 import PathExtension from "../extensions/path";
+import {IOutputFileDescription, IOutputNameData, IGeneratorConfig, NamingConvention} from "./interfaces";
 
 export type ExecutionResult = {
     created: Array<string>;
@@ -12,7 +12,7 @@ export type ExecutionResult = {
 };
 
 export default class Generator {
-    constructor(private config: ISettings) {
+    constructor(public readonly config: IGeneratorConfig) {
     }
 
     execute(workingDir: string, path: string, options?: Array<string>): ExecutionResult {
@@ -123,7 +123,7 @@ export default class Generator {
     }
 
     private normalizeName(name: string): string {
-        const namingConvention = this.config.namingConvention
+        const namingConvention: NamingConvention = this.config.namingConvention
             ? this.config.namingConvention
             : "pascalCase";
 
