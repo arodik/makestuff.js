@@ -23,9 +23,7 @@ export default class MakestuffCli {
 
     private setupCli(cliEngine: any) {
         this.configs.forEach((config) => {
-            const description = config.description || "";
-
-            cliEngine.command(config.name, description)
+            cliEngine.command(config.name, config.description)
                 .argument("<path>", "Path to generated entity with name in the end")
                 .action((args: Record<string, string>, options: Object, logger: any) => {
                     logger.debug(`Workdir: ${this.workdir}`);
