@@ -8,29 +8,29 @@
     "makestuff": "dist/cli/entrypoint.js"
   },
   "scripts": {
-    "start": "npm run lint && npm-run-all -p -r ts:watch lint:watch",
+    "start": "npm run lint && npm-run-all -p -r ts-watch lint-watch",
     "lint": "tslint -p ./ --force --format stylish",
-    "ts:watch": "tsc --watch --pretty",
-    "lint:watch": "onchange './src/**/*.ts' -d 300 -- npm run lint",
+    "ts-watch": "tsc --watch --pretty",
+    "lint-watch": "onchange './src/**/*.ts' -d 300 -i -- npm run lint",
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "@types/node": "8.0.19",
-    "caporal": "0.7.0",
-    "ejs": "2.5.7",
-    "mkdirp": "0.5.1",
-    "typescript": "2.4.2"
+    "@types/node": "^8",
+    "caporal": "^0",
+    "ejs": "^2",
+    "mkdirp": "^0",
+    "typescript": "^2"
   },
   "devDependencies": {
-    "@types/jest": "20.0.6",
-    "jest": "20.0.4",
-    "npm-run-all": "4.0.2",
-    "onchange": "3.2.1",
-    "ts-jest": "20.0.9",
-    "tslint": "5.5.0"
+    "@types/jest": "^21",
+    "jest": "^21",
+    "npm-run-all": "^4",
+    "onchange": "^3",
+    "ts-jest": "^21",
+    "tslint": "^5"
   },
   "jest": {
     "transform": {
