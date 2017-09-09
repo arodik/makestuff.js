@@ -11,26 +11,26 @@
     "start": "npm run lint && npm-run-all -p -r ts-watch lint-watch",
     "lint": "tslint -p ./ --force --format stylish",
     "ts-watch": "tsc --watch --pretty",
-    "lint-watch": "onchange './src/**/*.ts' -d 300 -i -- npm run lint",
+    "lint-watch": "onchange './src/**/*.ts' -d 300 -- npm run lint",
     "build": "tsc",
     "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test-watch": "jest --watchAll",
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "@types/node": "^8",
-    "caporal": "^0",
-    "ejs": "^2",
-    "mkdirp": "^0",
-    "typescript": "^2"
+    "@types/node": "^8.0.28",
+    "caporal": "^0.7.0",
+    "ejs": "^2.5.7",
+    "mkdirp": "^0.5.1",
+    "typescript": "^2.5.2"
   },
   "devDependencies": {
-    "@types/jest": "^21",
-    "jest": "^21",
-    "npm-run-all": "^4",
-    "onchange": "^3",
-    "ts-jest": "^21",
-    "tslint": "^5"
+    "@types/jest": "^21.0.8",
+    "jest": "^21.0.4",
+    "npm-run-all": "^4.1.1",
+    "onchange": "^3.2.1",
+    "ts-jest": "^21.0.14",
+    "tslint": "^5.7.0"
   },
   "jest": {
     "transform": {
