@@ -8,7 +8,7 @@ export type RootDescription = {
 
 export interface IGeneratorConfig {
     name: string;
-    root?: string | Array<RootDescription>;
+    // root?: string | Array<RootDescription>;
     description?: string;
     templatesRoot?: string;
     namingConvention?: NamingConvention;
@@ -20,7 +20,7 @@ export interface IGeneratorConfig {
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
-    root: Array<RootDescription>;
+    // root: Array<RootDescription>;
     description: string;
     templatesRoot: string;
     namingConvention: NamingConvention;

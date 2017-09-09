@@ -8,7 +8,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     private props: IStrictGeneratorConfig;
 
     @Prop() name: string;
-    @Prop() root: Array<RootDescription>;
+    // @Prop() root: Array<RootDescription>;
     @Prop() description: string;
     @Prop() templatesRoot: string;
     @Prop() namingConvention: NamingConvention;
@@ -51,18 +51,6 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
 
     private normalizeConfig(config: IGeneratorConfig): IStrictGeneratorConfig {
         const normalizedConfig = {...config};
-
-        if (!config.root) {
-            config.root = "./";
-        }
-
-        if (config.root === "string") {
-            normalizedConfig.root = [{
-                name: "@default",
-                path: config.root,
-                default: true
-            }];
-        }
 
         normalizedConfig.description = config.description || "";
         normalizedConfig.templatesRoot = config.templatesRoot || "./";
