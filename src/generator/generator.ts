@@ -16,8 +16,7 @@ export default class Generator {
     }
 
     execute(workingDir: string, path: string, options?: Array<string>): ExecutionResult {
-        const createDirectory = this.config.createDirectory !== false,
-            normalizedPath = PathExtension.trimLeadingSlashes(path),
+        const normalizedPath = PathExtension.trimLeadingSlashes(path),
             pathToEntityDir = Path.dirname(normalizedPath),
             rawEntityName = Path.basename(normalizedPath),
             normalizedEntityName = this.normalizeName(rawEntityName),
@@ -28,7 +27,7 @@ export default class Generator {
 
         const filesToCreate = this.normalizeOutputFiles(workingDir, rawEntityName);
 
-        const absoluteEntityDirPath = createDirectory
+        const absoluteEntityDirPath = this.config.createDirectory
             ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
             : Path.resolve(workingDir, pathToEntityDir);
 

@@ -16,13 +16,14 @@ Tiny scaffolding tool for your project
 // projectRoot/makestuff.js
 const componentGenerator = {
    name: "component", // name for your command
-   description: "Generate the component",
-   templatesRoot: "./templates", // tells the generator where to find the templates, 
-                                 // can be absolute or relative to the appRoot
+   description: "Generate the component", // description for CLI help
    namingConvention: "PascalCase", // by default
-   // Create some extra data for the command. They will be exposed to the templates
+   createDirectory: true, // by default. Tells the engine to create the folder, name based on naming convention
+   // Create some extra data for the command. They will be exposed to the templates inside the object called `custom`
    templateVars: function(input, predefinedSettings) {
-       return predefinedSettings;
+       return {
+           myOwnVar: 123
+       };
    },
    // Tells the generator where to put the result files
    outputFiles: [

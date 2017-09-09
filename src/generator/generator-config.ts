@@ -55,7 +55,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
         normalizedConfig.description = config.description || "";
         normalizedConfig.templatesRoot = config.templatesRoot || "./";
         normalizedConfig.namingConvention = config.namingConvention || "pascalCase";
-        normalizedConfig.createDirectory = config.createDirectory || true;
+        normalizedConfig.createDirectory = config.createDirectory !== false;
         normalizedConfig.flags = config.flags || {};
         normalizedConfig.templateVars = config.templateVars || function(input, predefinedSettings) {
             return {};
