@@ -14,6 +14,8 @@
       true,
       120
     ],
+    "no-magic-numbers": [true, -1, 0, 1, 2],
+    "prefer-const": true,
     "no-arg": true,
     "no-bitwise": false,
     "no-console": [
@@ -52,7 +54,8 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "always",
+      "ignore-bound-class-methods"
     ],
     "triple-equals": [
       true,
@@ -66,6 +69,8 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ]
+    ],
+    "align": [true, "parameters", "statements", "members", "elements"],
+    "no-consecutive-blank-lines": true
   }
 }
