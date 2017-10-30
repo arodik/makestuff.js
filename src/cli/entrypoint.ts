@@ -15,7 +15,7 @@ if (!configPath) {
     process.exit(ErrorCodes.cantFindConfig);
 }
 
-let configs = require(configPath as string) as Array<IGeneratorConfig>;
+const configs = require(configPath as string) as Array<IGeneratorConfig>;
 
 const packageInfo = require("../../package.json");
 CaporalCli.version(packageInfo.version);
