@@ -75,9 +75,9 @@ describe("shell", function () {
 
     test("can create files using template specified by absolute path", function () {
         const absolutePathFile = {
-                outputName: "absolute.test",
-                templatePath: getAbsPathTo("absolute-test.tpl")
-            };
+            outputName: "absolute.test",
+            templatePath: getAbsPathTo("absolute-test.tpl")
+        };
 
         FsExtension.writeFile(absolutePathFile.templatePath, simpleTemplate);
 
@@ -95,9 +95,9 @@ describe("shell", function () {
 
     test("can create files using template specified by relative path", function () {
         const relativePathFile = {
-                outputName: "relative.test",
-                templatePath: "./absolute-test.tpl"
-            };
+            outputName: "relative.test",
+            templatePath: "./absolute-test.tpl"
+        };
 
         const properPathToTemplate = path.resolve(testWorkingDir, templatesRootPath, relativePathFile.templatePath);
         FsExtension.writeFile(properPathToTemplate, simpleTemplate);
@@ -145,7 +145,7 @@ describe("shell", function () {
         });
 
         // TODO: throw the typed error
-        expect(function() {
+        expect(function () {
             const result = generator.run(dirWithTests, "component", testComponentPath);
         }).toThrowError();
     });
