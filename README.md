@@ -29,14 +29,14 @@ const componentGenerator = {
    outputFiles: [
        {
            templatePath: "./templates/component.ejs",
-           outputName: data => `${data.dashedName}.component.ts`
+           name: data => `${data.dashedName}.component.ts`
        },
        {
            template: "some file content",
-           outputName: data => `${data.dashedName}.ts`
+           name: data => `${data.dashedName}.ts`
        },
        {
-           outputName: data => `${data.dashedName}.html` // just create emplty file
+           name: data => `${data.dashedName}.html` // just create emplty file
        }
    ]
 }

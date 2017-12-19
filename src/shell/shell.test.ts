@@ -31,14 +31,14 @@ describe("shell", function () {
         const testCommandPath = "test/TestComponent",
             testFiles = [
                 "index.test",
-                {outputName: "testFile.test"},
-                {outputName: (data) => `raw.${data.name.raw}.test`},
-                {outputName: (data) => `cc.${data.name.camelCase}.test`},
-                {outputName: (data) => `pc.${data.name.pascalCase}.test`},
-                {outputName: (data) => `kc.${data.name.kebabCase}.test`},
-                {outputName: (data) => `tc.${data.name.trainCase}.test`},
-                {outputName: (data) => `sc.${data.name.snakeCase}.test`},
-                {outputName: (data) => `dc.${data.name.dotCase}.test`},
+                {name: "testFile.test"},
+                {name: (data) => `raw.${data.name.raw}.test`},
+                {name: (data) => `cc.${data.name.camelCase}.test`},
+                {name: (data) => `pc.${data.name.pascalCase}.test`},
+                {name: (data) => `kc.${data.name.kebabCase}.test`},
+                {name: (data) => `tc.${data.name.trainCase}.test`},
+                {name: (data) => `sc.${data.name.snakeCase}.test`},
+                {name: (data) => `dc.${data.name.dotCase}.test`},
             ];
 
         generator.setupGenerator({
@@ -75,7 +75,7 @@ describe("shell", function () {
 
     test("can create files using template specified by absolute path", function () {
         const absolutePathFile = {
-            outputName: "absolute.test",
+            name: "absolute.test",
             templatePath: getAbsPathTo("absolute-test.tpl")
         };
 
@@ -95,7 +95,7 @@ describe("shell", function () {
 
     test("can create files using template specified by relative path", function () {
         const relativePathFile = {
-            outputName: "relative.test",
+            name: "relative.test",
             templatePath: "./absolute-test.tpl"
         };
 
@@ -118,7 +118,7 @@ describe("shell", function () {
 
     test("can create files using template as string", function () {
         const fileFromStringTemplate = {
-            outputName: "from-string-template.test",
+            name: "from-string-template.test",
             template: simpleTemplate
         };
 
@@ -138,7 +138,7 @@ describe("shell", function () {
             name: "component",
             output: [
                 {
-                    outputName: "absolute.test",
+                    name: "absolute.test",
                     templatePath: getAbsPathTo("non-existing-template.tpl")
                 }
             ]
@@ -161,7 +161,7 @@ describe("shell", function () {
                 };
             },
             output: [
-                {outputName: "additional-fields.test", template: "<%- custom.testVar %>"},
+                {name: "additional-fields.test", template: "<%- custom.testVar %>"},
             ]
         });
 

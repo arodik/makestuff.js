@@ -43,7 +43,7 @@ export interface ISettingsFlag {
 export interface IOutputFileDescription {
     template?: string;
     templatePath?: string;
-    outputName: ((data: IOutputNameData) => string) | string;
+    name: ((data: IOutputNameData) => string) | string;
 }
 
 export interface IOutputNameData {

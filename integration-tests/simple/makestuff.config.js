@@ -12,7 +12,7 @@ module.exports = [
         output: [
             {
                 templatePath: "./templates/component-ng2.ejs",
-                outputName: data => `${data.name.kebabCase}.component.ts`
+                name: data => `${data.name.kebabCase}.component.ts`
             },
             {
                 // if file contains "optional" field - engine generates it only if user added corresponding flag
@@ -22,7 +22,7 @@ module.exports = [
                     shortName: "s",
                     description: "include styles file"
                 },
-                outputName: data => "_styles.scss"
+                name: data => "_styles.scss"
             }
         ]
     }

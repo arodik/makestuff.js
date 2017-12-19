@@ -32,7 +32,7 @@ export default class Generator {
             : Path.resolve(workingDir, pathToEntityDir);
 
         filesToCreate.forEach(function(file) {
-            const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.outputName),
+            const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.name),
                 fileContent = file.template || "";
 
             try {
@@ -53,11 +53,11 @@ export default class Generator {
         return this.config.output.map((file) => {
             if (typeof file === "string") {
                 return {
-                    outputName: file
+                    name: file
                 };
             } else if (typeof file === "function") {
                 return {
-                    outputName: file(generatorData)
+                    name: file(generatorData)
                 };
             }
 
@@ -73,8 +73,8 @@ export default class Generator {
                 custom: customData
             };
 
-            if (typeof file.outputName === "function") {
-                result.outputName = file.outputName(generatorData);
+            if (typeof file.name === "function") {
+                result.name = file.name(generatorData);
             }
 
             if (file.template) {
