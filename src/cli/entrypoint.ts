@@ -2,13 +2,12 @@
 import * as CaporalCli from "caporal";
 import * as Chalk from "chalk";
 import * as path from "path";
-import FsExtension from "../extensions/fs";
 import {IGeneratorConfig} from "../generator/interfaces";
 import ErrorCodes from "./error-codes";
 import MakestuffCli from "./cli";
+import Config from "../extensions/config";
 
-const configFileName = "makestuff.config.js";
-const configPath = FsExtension.locateFileRecursively(configFileName, process.cwd());
+const configPath = Config.locate(process.cwd());
 
 if (configPath) {
     // always use config's directory as a working directory
@@ -22,6 +21,7 @@ if (configPath) {
 
     makestuffCli.run(CaporalCli);
 } else {
-    console.error(Chalk.red(`Can't find ${configFileName}`));
+    console.error(Chalk.red("Can't find " + Config.fileName + " or package.json that contains information about " +
+        "Makestuff config path"));
     process.exit(ErrorCodes.cantFindConfig);
 }

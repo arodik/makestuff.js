@@ -1,0 +1,6 @@
+{
+  "name": "test-package",
+  "makestuff": {
+    "configPath": "../simple/makestuff.config.js"
+  }
+}

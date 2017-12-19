@@ -1,8 +1,3 @@
-// TODO:
-// root
-// templatesRoot
-// flags
-
 module.exports = [
     {
         name: "component-ng2",
@@ -14,6 +9,16 @@ module.exports = [
                 testVar: "TESTCONTENT"
             };
         },
+        // options: [
+        //     {
+        //         name: "styles",
+        //         shortName: "s",
+        //         description: "include styles file",
+        //         execute: function(data, actions) {
+        //
+        //         }
+        //     }
+        // ],
         outputFiles: [
             {
                 templatePath: "./templates/component-ng2.ejs",
