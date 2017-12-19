@@ -9,22 +9,19 @@ module.exports = [
                 testVar: "TESTCONTENT"
             };
         },
-        // options: [
-        //     {
-        //         name: "styles",
-        //         shortName: "s",
-        //         description: "include styles file",
-        //         execute: function(data, actions) {
-        //
-        //         }
-        //     }
-        // ],
-        outputFiles: [
+        output: [
             {
                 templatePath: "./templates/component-ng2.ejs",
                 outputName: data => `${data.name.kebabCase}.component.ts`
             },
             {
+                // if file contains "optional" field - engine generates it only if user added corresponding flag
+                // to the command
+                optional: {
+                    name: "styles",
+                    shortName: "s",
+                    description: "include styles file"
+                },
                 outputName: data => "_styles.scss"
             }
         ]

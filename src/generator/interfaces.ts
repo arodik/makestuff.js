@@ -16,7 +16,7 @@ export interface IGeneratorConfig {
     flags?: ISettingsFlags;
     // TODO: rename the function name and args
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
-    outputFiles: Array<string | IOutputFileDescription>;
+    output: Array<string | IOutputFileDescription>;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -28,7 +28,7 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     flags: ISettingsFlags;
     // TODO: rename the function name and args
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    outputFiles: Array<IOutputFileDescription>;
+    output: Array<IOutputFileDescription>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

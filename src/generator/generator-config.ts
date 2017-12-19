@@ -1,5 +1,5 @@
 import {
-    IGeneratorConfig, IOutputFileDescription, ISettingsFlags, IStrictGeneratorConfig, NamingConvention, RootDescription
+    IGeneratorConfig, IOutputFileDescription, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
 } from "./interfaces";
 import {Prop} from "../decorators";
 import {InvalidConfigValueError} from "./error/invalid-config-value";
@@ -15,7 +15,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() createDirectory: boolean;
     @Prop() flags: ISettingsFlags;
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    @Prop() outputFiles: Array<IOutputFileDescription>;
+    @Prop() output: Array<IOutputFileDescription>;
 
     constructor(private originalUserConfig: IGeneratorConfig) {
         this.validateConfig(originalUserConfig);
@@ -34,8 +34,8 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
             }
         }
 
-        if (Array.isArray(config.outputFiles)) {
-            if (!config.outputFiles.length) {
+        if (Array.isArray(config.output)) {
+            if (!config.output.length) {
                 throw new InvalidConfigValueError("You must specify at least one output file");
             }
         }
@@ -61,8 +61,8 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
             return {};
         };
 
-        if (!Array.isArray(config.outputFiles)) {
-            normalizedConfig.outputFiles = [];
+        if (!Array.isArray(config.output)) {
+            normalizedConfig.output = [];
         }
 
         return normalizedConfig as IStrictGeneratorConfig;

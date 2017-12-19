@@ -50,7 +50,7 @@ export default class Generator {
     private normalizeOutputFiles(workingDir: string, generatorName: string): Array<IOutputFileDescription> {
         const generatorData = this.getGeneratorData(generatorName);
 
-        return this.config.outputFiles.map((file) => {
+        return this.config.output.map((file) => {
             if (typeof file === "string") {
                 return {
                     outputName: file

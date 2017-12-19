@@ -43,7 +43,7 @@ describe("shell", function () {
 
         generator.setupGenerator({
             name: "component",
-            outputFiles: testFiles
+            output: testFiles
         });
 
         const result = generator.run(testWorkingDir, "component", testCommandPath);
@@ -84,7 +84,7 @@ describe("shell", function () {
         generator.setupGenerator({
             name: "component",
             templatesRoot: templatesRootPath,
-            outputFiles: [absolutePathFile]
+            output: [absolutePathFile]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -105,7 +105,7 @@ describe("shell", function () {
         generator.setupGenerator({
             name: "component",
             templatesRoot: templatesRootPath,
-            outputFiles: [relativePathFile]
+            output: [relativePathFile]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -124,7 +124,7 @@ describe("shell", function () {
 
         generator.setupGenerator({
             name: "component",
-            outputFiles: [fileFromStringTemplate]
+            output: [fileFromStringTemplate]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -136,7 +136,7 @@ describe("shell", function () {
     test("must throw the error if template file doesn't exists", function () {
         generator.setupGenerator({
             name: "component",
-            outputFiles: [
+            output: [
                 {
                     outputName: "absolute.test",
                     templatePath: getAbsPathTo("non-existing-template.tpl")
@@ -160,7 +160,7 @@ describe("shell", function () {
                     testVar: testContent
                 };
             },
-            outputFiles: [
+            output: [
                 {outputName: "additional-fields.test", template: "<%- custom.testVar %>"},
             ]
         });
