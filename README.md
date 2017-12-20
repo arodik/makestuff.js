@@ -41,7 +41,9 @@ const componentGenerator = {
    ]
 }
 
-module.exports = [
-    componentGenerator
-];
+module.exports = {
+    commands: [
+        componentGenerator
+    ]
+};
 ```

@@ -6,27 +6,27 @@ export type RootDescription = {
     default?: boolean;
 };
 
+export interface IMakestuffConfig {
+    commands: Array<IGeneratorConfig>;
+}
+
 export interface IGeneratorConfig {
     name: string;
-    // root?: string | Array<RootDescription>;
     description?: string;
     templatesRoot?: string;
     namingConvention?: NamingConvention;
     createDirectory?: boolean;
     flags?: ISettingsFlags;
-    // TODO: rename the function name and args
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<string | IOutputFileDescription>;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
-    // root: Array<RootDescription>;
     description: string;
     templatesRoot: string;
     namingConvention: NamingConvention;
     createDirectory: boolean;
     flags: ISettingsFlags;
-    // TODO: rename the function name and args
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<IOutputFileDescription>;
 }
