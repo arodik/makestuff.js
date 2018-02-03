@@ -18,20 +18,20 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "@types/node": "^8.5.2",
+    "@types/node": "^9.4.0",
     "caporal": "^0.9.0",
     "ejs": "^2.5.7",
     "mkdirp": "^0.5.1",
-    "typescript": "^2.6.2"
+    "typescript": "^2.7.1"
   },
   "devDependencies": {
-    "@types/jest": "^21.1.9",
+    "@types/jest": "^22.1.1",
     "chalk": "^2.3.0",
-    "jest": "^22.0.3",
+    "jest": "^22.1.4",
     "npm-run-all": "^4.1.2",
     "onchange": "^3.3.0",
-    "ts-jest": "^22.0.0",
-    "tslint": "^5.8.0"
+    "ts-jest": "^22.0.3",
+    "tslint": "^5.9.1"
   },
   "jest": {
     "transform": {

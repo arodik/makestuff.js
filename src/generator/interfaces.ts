@@ -10,6 +10,8 @@ export interface IMakestuffConfig {
     commands: Array<IGeneratorConfig>;
 }
 
+type TOutputFile = string | IOutputFileDescription;
+
 export interface IGeneratorConfig {
     name: string;
     description?: string;
@@ -18,7 +20,7 @@ export interface IGeneratorConfig {
     createDirectory?: boolean;
     flags?: ISettingsFlags;
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
-    output: Array<string | IOutputFileDescription>;
+    output: Array<TOutputFile>;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -44,6 +46,11 @@ export interface IOutputFileDescription {
     template?: string;
     templatePath?: string;
     name: ((data: IOutputNameData) => string) | string;
+}
+
+export interface INormalizedOutputFileDescription {
+    template: string;
+    name: string;
 }
 
 export interface IOutputNameData {

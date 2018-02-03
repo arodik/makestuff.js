@@ -4,7 +4,9 @@ import * as ejs from "ejs";
 import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import PathExtension from "../extensions/path";
-import {IOutputFileDescription, IOutputNameData, IGeneratorConfig, NamingConvention} from "./interfaces";
+import {
+    IGeneratorConfig, INormalizedOutputFileDescription, IOutputFileDescription, IOutputNameData, NamingConvention
+} from "./interfaces";
 
 export type ExecutionResult = {
     created: Array<string>;
@@ -32,11 +34,10 @@ export default class Generator {
             : Path.resolve(workingDir, pathToEntityDir);
 
         filesToCreate.forEach(function(file) {
-            const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.name),
-                fileContent = file.template || "";
+            const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.name);
 
             try {
-                FileExtension.writeFile(fullPathToFile, fileContent);
+                FileExtension.writeFile(fullPathToFile, file.template);
                 result.created.push(fullPathToFile);
             } catch (e) {
                 result.errors.push(fullPathToFile);
@@ -47,47 +48,54 @@ export default class Generator {
     }
 
     // TODO: rename this func
-    private normalizeOutputFiles(workingDir: string, generatorName: string): Array<IOutputFileDescription> {
+    private normalizeOutputFiles(workingDir: string, generatorName: string): Array<INormalizedOutputFileDescription> {
         const generatorData = this.getGeneratorData(generatorName);
 
         return this.config.output.map((file) => {
             if (typeof file === "string") {
                 return {
-                    name: file
-                };
-            } else if (typeof file === "function") {
-                return {
-                    name: file(generatorData)
+                    name: file,
+                    template: ""
                 };
             }
 
-            const result = {...file};
+            const template = this.createTemplate(file, generatorData, workingDir);
+            const name = (typeof file.name === "function")
+                ? file.name(generatorData)
+                : file.name;
 
-            const customData = typeof this.config.templateVars === "function"
-                ? this.config.templateVars({}, generatorData)
-                : {};
-
-            const templateData = {
-                // TODO: rename this key
-                data: generatorData,
-                custom: customData
+            return {
+                name,
+                template
             };
-
-            if (typeof file.name === "function") {
-                result.name = file.name(generatorData);
-            }
-
-            if (file.template) {
-                result.template = ejs.render(file.template, templateData);
-            } else if (file.templatePath) {
-                const pathToTemplate = this.normalizePathToTemplate(workingDir, file.templatePath);
-                const rawTpl = fs.readFileSync(pathToTemplate, "UTF-8");
-
-                result.template = ejs.render(rawTpl, templateData);
-            }
-
-            return result;
         });
+    }
+
+    private createTemplate(
+        description: IOutputFileDescription,
+        generatorData: IOutputNameData,
+        workingDir: string
+    ): string {
+        const customData = typeof this.config.templateVars === "function"
+            ? this.config.templateVars({}, generatorData)
+            : {};
+
+        const templateData = {
+            // TODO: rename this key
+            data: generatorData,
+            custom: customData
+        };
+
+        if (description.template) {
+            return ejs.render(description.template, templateData);
+        } else if (description.templatePath) {
+            const pathToTemplate = this.normalizePathToTemplate(workingDir, description.templatePath);
+            const rawTpl = fs.readFileSync(pathToTemplate, "UTF-8");
+
+            return ejs.render(rawTpl, templateData);
+        }
+
+        return "";
     }
 
     private normalizePathToTemplate(workingDir: string, templatePath: string): string {
