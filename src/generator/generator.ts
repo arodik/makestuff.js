@@ -109,8 +109,7 @@ export default class Generator {
             : {};
 
         const templateData = {
-            // TODO: rename this key
-            data: generatorData,
+            ...generatorData,
             custom: customData
         };
 

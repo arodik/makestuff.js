@@ -8,7 +8,7 @@ const dirWithTests = path.resolve(__dirname, "../../test-files"),
     testWorkingDir = dirWithTests,
     absoluteDir = "/tmp/makestuff",
     testComponentPath = "components/TestComponent",
-    simpleTemplate = "export default class <%= data.name.default %> {}",
+    simpleTemplate = "export default class <%= name.default %> {}",
     compiledSimpleTemplate = "export default class TestComponent {}",
     templatesRootPath = "./templates";
 
@@ -179,12 +179,12 @@ describe("shell", function () {
     });
 
     test("template has access to options", function() {
-        const templateWithCustomVar = "<%-data.options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
+        const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
         const compiledTemplate = "custom-detected";
 
         const fileFromStringTemplate = {
             name: "from-string-template.test",
-            template: templateWithCustomVar
+            template: templateWithCustomOption
         };
 
         generator.setupGenerator({
