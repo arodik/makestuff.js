@@ -15,7 +15,7 @@ export default class GeneratorShell {
         this._generators.push(new Generator(strictConfig));
     }
 
-    run(workingDir: string, generatorName: string, path: string, options: Array<string>): ExecutionResult {
+    run(workingDir: string, generatorName: string, path: string, options: Array<string> = []): ExecutionResult {
         const generator = this.findGeneratorByName(generatorName);
         if (!generator) {
             throw new WrongGeneratorNameError(`Can't find generator with name ${generatorName}`);

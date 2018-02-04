@@ -2,6 +2,7 @@ import GeneratorShell from "./shell";
 import * as path from "path";
 import * as fs from "fs";
 import FsExtension from "../extensions/fs";
+import {IGeneratorCallbackData} from "../generator/interfaces";
 
 const dirWithTests = path.resolve(__dirname, "../../test-files"),
     testWorkingDir = dirWithTests,
@@ -32,13 +33,13 @@ describe("shell", function () {
             testFiles = [
                 "index.test",
                 {name: "testFile.test"},
-                {name: (data) => `raw.${data.name.raw}.test`},
-                {name: (data) => `cc.${data.name.camelCase}.test`},
-                {name: (data) => `pc.${data.name.pascalCase}.test`},
-                {name: (data) => `kc.${data.name.kebabCase}.test`},
-                {name: (data) => `tc.${data.name.trainCase}.test`},
-                {name: (data) => `sc.${data.name.snakeCase}.test`},
-                {name: (data) => `dc.${data.name.dotCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `raw.${data.name.raw}.test`},
+                {name: (data: IGeneratorCallbackData) => `cc.${data.name.camelCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `pc.${data.name.pascalCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `kc.${data.name.kebabCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `tc.${data.name.trainCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `sc.${data.name.snakeCase}.test`},
+                {name: (data: IGeneratorCallbackData) => `dc.${data.name.dotCase}.test`},
             ];
 
         generator.setupGenerator({
@@ -175,5 +176,30 @@ describe("shell", function () {
         );
 
         expect(content).toBe(testContent);
+    });
+
+    test("template has access to options", function() {
+        const templateWithCustomVar = "<%-data.options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
+        const compiledTemplate = "custom-detected";
+
+        const fileFromStringTemplate = {
+            name: "from-string-template.test",
+            template: templateWithCustomVar
+        };
+
+        generator.setupGenerator({
+            name: "component",
+            output: [fileFromStringTemplate]
+        });
+
+        const result = generator.run(
+            testWorkingDir,
+            "component",
+            testComponentPath,
+            ["myTestOption"]
+        );
+        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+
+        expect(resultFileContent).toBe(compiledTemplate);
     });
 });

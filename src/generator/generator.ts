@@ -5,7 +5,7 @@ import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import PathExtension from "../extensions/path";
 import {
-    INormalizedOutputFile, IOutputFile, IOutputNameData, IStrictGeneratorConfig, NamingConvention, TOutputFile
+    INormalizedOutputFile, IOutputFile, IGeneratorCallbackData, IStrictGeneratorConfig, NamingConvention, TOutputFile
 } from "./interfaces";
 
 export type ExecutionResult = {
@@ -28,7 +28,7 @@ export default class Generator {
             };
 
         const filesToCreate = [
-            ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName),
+            ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName, options),
             ...this.getOptionalFiles(options, workingDir, rawEntityName)
         ];
 
@@ -55,16 +55,17 @@ export default class Generator {
         workingDir: string,
         rawEntityName: string
     ): Array<INormalizedOutputFile> {
-        return this.getNormalizedFiles(this.config.optionalOutput, workingDir, rawEntityName)
+        return this.getNormalizedFiles(this.config.optionalOutput, workingDir, rawEntityName, options)
             .filter((file) => options.indexOf(file.optionName) !== -1);
     }
 
     private getNormalizedFiles(
         fileList: Array<TOutputFile>,
         workingDir: string,
-        generatorName: string
+        generatorName: string,
+        options: Array<string>
     ): Array<INormalizedOutputFile> {
-        const generatorData = this.getGeneratorData(generatorName);
+        const generatorData = this.getGeneratorCallbackData(generatorName, options);
 
         return fileList.map((file) => {
             if (typeof file === "string") {
@@ -90,7 +91,7 @@ export default class Generator {
         });
     }
 
-    private cleanOptionName(optionName: string): string {
+    private cleanOptionName(optionName?: string): string {
         if (optionName) {
             return optionName.replace(/-/g, "");
         }
@@ -100,7 +101,7 @@ export default class Generator {
 
     private createTemplate(
         description: IOutputFile,
-        generatorData: IOutputNameData,
+        generatorData: IGeneratorCallbackData,
         workingDir: string
     ): string {
         const customData = typeof this.config.templateVars === "function"
@@ -140,8 +141,7 @@ export default class Generator {
         }
     }
 
-    // TODO: rename this func
-    private getGeneratorData(name: string): IOutputNameData {
+    private getGeneratorCallbackData(name: string, options: Array<string>): IGeneratorCallbackData {
         return {
             name: {
                 raw: name,
@@ -152,8 +152,16 @@ export default class Generator {
                 trainCase: StringExtension.trainCase(name),
                 snakeCase: StringExtension.snakeCase(name),
                 dotCase: StringExtension.dotCase(name)
-            }
+            },
+            options: this.createDummyOptionsDictionary(options)
         };
+    }
+
+    private createDummyOptionsDictionary(options: Array<string>): Record<string, boolean> {
+        return options.reduce((dictionary, option) => {
+            dictionary[option] = true;
+            return dictionary;
+        }, {} as Record<string, boolean>);
     }
 
     private normalizeName(name: string): string {

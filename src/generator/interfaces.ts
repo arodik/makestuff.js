@@ -5,11 +5,11 @@ export interface IMakestuffConfig {
 }
 
 export interface IOutputFile {
-    optionName: string;
+    name: ((data: IGeneratorCallbackData) => string) | string;
+    optionName?: string;
     optionDescription?: string;
     template?: string;
     templatePath?: string;
-    name: ((data: IOutputNameData) => string) | string;
 }
 
 export type TOutputFile = string | IOutputFile;
@@ -53,7 +53,7 @@ export interface ISettingsFlag {
     action: (data: any) => void;
 }
 
-export interface IOutputNameData {
+export interface IGeneratorCallbackData {
     name: {
         raw: string;
         default: string;
@@ -64,4 +64,5 @@ export interface IOutputNameData {
         snakeCase: string;
         dotCase: string;
     };
+    options: Record<string, any>;
 }

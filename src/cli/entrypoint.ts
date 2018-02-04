@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import * as CaporalCli from "caporal";
+import Caporal from "caporal";
 import * as Chalk from "chalk";
 import * as path from "path";
 import ErrorCodes from "./error-codes";
@@ -15,11 +15,11 @@ if (configPath) {
     const makestuffConfig = require(configPath) as IMakestuffConfig;
 
     const packageInfo = require("../../package.json");
-    CaporalCli.version(packageInfo.version);
+    Caporal.version(packageInfo.version);
 
     const makestuffCli = new MakestuffCli(workingDir, makestuffConfig);
 
-    makestuffCli.run(CaporalCli);
+    makestuffCli.run(Caporal);
 } else {
     console.error(Chalk.red("Can't find " + Config.fileName + " or package.json that contains information about " +
         "Makestuff config path"));

@@ -63,8 +63,12 @@ export default class MakestuffCli {
     }
 
     private getEnabledBooleanOptions(options: Record<string, any>): Array<string> {
-        return Object.keys(options).filter((option) => {
+        const enabledOptions = Object.keys(options).filter((option) => {
             return options[option] === true;
         });
+
+        const uniqOptions = Array.from(new Set(enabledOptions));
+
+        return uniqOptions;
     }
 }
