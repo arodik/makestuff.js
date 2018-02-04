@@ -97,7 +97,7 @@ MyFirstTestComponent.$inject = dependencies;
 MyFirstTestComponent.controller = MyFirstTestComponent;
 MyFirstTestComponent.template = template;
 ```
-- Vòlia! Now you don't have to write all this boring shit manually!
+- Voilà! Now you don't have to write all this boring shit manually!
 
 ## How it works?
 TBD
