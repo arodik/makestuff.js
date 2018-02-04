@@ -1,19 +1,16 @@
 # makestuff.js
-Tiny scaffolding tool for your project
+Makestuff is a tiny tool that allows you to create and execute your own simple scaffolding rules for project.
+You can automatically create boring boilerplate stuff in your project.
 
 [![Build Status](https://travis-ci.org/arodik/makestuff.js.svg?branch=master)](https://travis-ci.org/arodik/makestuff.js)
 [![bitHound Overall Score](https://www.bithound.io/github/arodik/makestuff.js/badges/score.svg)](https://www.bithound.io/github/arodik/makestuff.js)
 
 ----------------
 
-## TL;DR
-Makestuff is a tiny tool that allows you to create and execute your own simple scaffolding rules for project.
-You can automatically create boring boilerplate stuff in your project.
+## Example:
+You have an old AngularJS project and you need to create components, modules, routing configs etc, so you need to write a lot of boilerplate code for each file.
 
-**Example:**
-You have an AngularJS project and you need to create components, modules, routing configs etc, so you need to write a lot of boilerplate code for each file.
-
-Let's automate it!
+Let's try to automate the component generation process!
 
 - Install the library. `npm i -g makestuff`
 - In your project root create the file called `makesuff.config.js` with the following content:
