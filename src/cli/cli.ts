@@ -1,4 +1,4 @@
-import {IMakestuffConfig} from "../generator/interfaces";
+import {IMakestuffConfig, INormalizedOutputFile} from "../generator/interfaces";
 import GeneratorShell from "../shell/shell";
 
 export default class MakestuffCli {
@@ -8,7 +8,7 @@ export default class MakestuffCli {
         this.setupShell(this.config);
     }
 
-    run(cliEngine: any) {
+    run(cliEngine: Caporal) {
         this.setupCli(cliEngine);
         cliEngine.parse(process.argv);
     }
@@ -21,23 +21,15 @@ export default class MakestuffCli {
         });
     }
 
-    private setupCli(cliEngine: any) {
+    private setupCli(cliEngine: Caporal) {
         this.shell.generators.forEach((generator) => {
             const config = generator.config;
             const cliCommand = cliEngine.command(config.name, config.description)
                 .argument("<path>", "Path to generated entity with name in the end");
 
-            config.optionalOutput.forEach((fileDescription) => {
-                if (fileDescription.optionName) {
-                    cliCommand.option(
-                        fileDescription.optionName,
-                        fileDescription.optionDescription,
-                        cliEngine.BOOL
-                    );
-                }
-            });
+            this.registerUniqOptions(config.optionalOutput, cliCommand, cliEngine);
 
-            cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: any) => {
+            cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
                 logger.debug(`Workdir: ${this.workdir}`);
 
                 const optionsList = this.getEnabledBooleanOptions(options);
@@ -45,6 +37,28 @@ export default class MakestuffCli {
 
                 console.warn(result);
             });
+        });
+    }
+
+    private registerUniqOptions(
+        outputFiles: Array<INormalizedOutputFile>,
+        cliCommand: Command,
+        cliEngine: Caporal
+    ) {
+        const uniqOptions = new Set();
+
+        outputFiles.forEach((fileDescription) => {
+            const optionExists = uniqOptions.has(fileDescription.optionName);
+
+            if (!optionExists) {
+                cliCommand.option(
+                    fileDescription.optionName,
+                    fileDescription.optionDescription,
+                    cliEngine.BOOL
+                );
+
+                uniqOptions.add(fileDescription.optionName);
+            }
         });
     }
 

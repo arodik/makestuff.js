@@ -40,8 +40,8 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     createDirectory: boolean;
     flags: ISettingsFlags;
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    output: Array<IOutputFile>;
-    optionalOutput: Array<IOutputFile>;
+    output: Array<INormalizedOutputFile>;
+    optionalOutput: Array<INormalizedOutputFile>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

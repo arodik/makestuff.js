@@ -1,4 +1,6 @@
-import {IGeneratorConfig, IOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention} from "./interfaces";
+import {
+    IGeneratorConfig, INormalizedOutputFile, IOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
+} from "./interfaces";
 import {Prop} from "../decorators";
 import {InvalidConfigValueError} from "./error/invalid-config-value";
 
@@ -12,8 +14,8 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() createDirectory: boolean;
     @Prop() flags: ISettingsFlags;
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    @Prop() output: Array<IOutputFile>;
-    @Prop() optionalOutput: Array<IOutputFile>;
+    @Prop() output: Array<INormalizedOutputFile>;
+    @Prop() optionalOutput: Array<INormalizedOutputFile>;
 
     constructor(private originalUserConfig: IGeneratorConfig) {
         this.validateConfig(originalUserConfig);

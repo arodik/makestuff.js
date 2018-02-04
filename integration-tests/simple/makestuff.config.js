@@ -20,7 +20,7 @@ module.exports = {
                 {
                     optionName: "--styles",
                     optionDescription: "include styles file",
-                    name: data => "_styles.scss"
+                    name: "_styles.scss"
                 }
             ]
         }
