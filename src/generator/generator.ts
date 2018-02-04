@@ -5,7 +5,7 @@ import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import PathExtension from "../extensions/path";
 import {
-    IGeneratorConfig, INormalizedOutputFileDescription, IOutputFileDescription, IOutputNameData, NamingConvention
+    INormalizedOutputFile, IOutputFile, IOutputNameData, IStrictGeneratorConfig, NamingConvention, TOutputFile
 } from "./interfaces";
 
 export type ExecutionResult = {
@@ -14,10 +14,10 @@ export type ExecutionResult = {
 };
 
 export default class Generator {
-    constructor(public readonly config: IGeneratorConfig) {
+    constructor(public readonly config: IStrictGeneratorConfig) {
     }
 
-    execute(workingDir: string, path: string, options?: Array<string>): ExecutionResult {
+    execute(workingDir: string, path: string, options: Array<string>): ExecutionResult {
         const normalizedPath = PathExtension.trimLeadingSlashes(path),
             pathToEntityDir = Path.dirname(normalizedPath),
             rawEntityName = Path.basename(normalizedPath),
@@ -27,7 +27,10 @@ export default class Generator {
                 errors: []
             };
 
-        const filesToCreate = this.normalizeOutputFiles(workingDir, rawEntityName);
+        const filesToCreate = [
+            ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName),
+            ...this.getOptionalFiles(options, workingDir, rawEntityName)
+        ];
 
         const absoluteEntityDirPath = this.config.createDirectory
             ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
@@ -47,15 +50,29 @@ export default class Generator {
         return result;
     }
 
-    // TODO: rename this func
-    private normalizeOutputFiles(workingDir: string, generatorName: string): Array<INormalizedOutputFileDescription> {
+    private getOptionalFiles(
+        options: Array<string>,
+        workingDir: string,
+        rawEntityName: string
+    ): Array<INormalizedOutputFile> {
+        return this.getNormalizedFiles(this.config.optionalOutput, workingDir, rawEntityName)
+            .filter((file) => options.indexOf(file.optionName) !== -1);
+    }
+
+    private getNormalizedFiles(
+        fileList: Array<TOutputFile>,
+        workingDir: string,
+        generatorName: string
+    ): Array<INormalizedOutputFile> {
         const generatorData = this.getGeneratorData(generatorName);
 
-        return this.config.output.map((file) => {
+        return fileList.map((file) => {
             if (typeof file === "string") {
                 return {
                     name: file,
-                    template: ""
+                    template: "",
+                    optionName: "",
+                    optionDescription: ""
                 };
             }
 
@@ -66,13 +83,23 @@ export default class Generator {
 
             return {
                 name,
-                template
+                template,
+                optionName: this.cleanOptionName(file.optionName),
+                optionDescription: file.optionDescription || ""
             };
         });
     }
 
+    private cleanOptionName(optionName: string): string {
+        if (optionName) {
+            return optionName.replace(/-/g, "");
+        }
+
+        return "";
+    }
+
     private createTemplate(
-        description: IOutputFileDescription,
+        description: IOutputFile,
         generatorData: IOutputNameData,
         workingDir: string
     ): string {

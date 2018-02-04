@@ -1,16 +1,25 @@
 export type NamingConvention = "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
 
-export type RootDescription = {
-    name: string;
-    path: string;
-    default?: boolean;
-};
-
 export interface IMakestuffConfig {
     commands: Array<IGeneratorConfig>;
 }
 
-type TOutputFile = string | IOutputFileDescription;
+export interface IOutputFile {
+    optionName: string;
+    optionDescription?: string;
+    template?: string;
+    templatePath?: string;
+    name: ((data: IOutputNameData) => string) | string;
+}
+
+export type TOutputFile = string | IOutputFile;
+
+export interface INormalizedOutputFile {
+    template: string;
+    name: string;
+    optionName: string;
+    optionDescription: string;
+}
 
 export interface IGeneratorConfig {
     name: string;
@@ -21,6 +30,7 @@ export interface IGeneratorConfig {
     flags?: ISettingsFlags;
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<TOutputFile>;
+    optionalOutput?: Array<IOutputFile>;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -30,7 +40,8 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     createDirectory: boolean;
     flags: ISettingsFlags;
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    output: Array<IOutputFileDescription>;
+    output: Array<IOutputFile>;
+    optionalOutput: Array<IOutputFile>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {
@@ -40,17 +51,6 @@ export interface ISettingsFlag {
     description: string;
     alternative: string;
     action: (data: any) => void;
-}
-
-export interface IOutputFileDescription {
-    template?: string;
-    templatePath?: string;
-    name: ((data: IOutputNameData) => string) | string;
-}
-
-export interface INormalizedOutputFileDescription {
-    template: string;
-    name: string;
 }
 
 export interface IOutputNameData {

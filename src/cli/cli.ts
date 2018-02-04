@@ -22,16 +22,35 @@ export default class MakestuffCli {
     }
 
     private setupCli(cliEngine: any) {
-        this.config.commands.forEach((command) => {
-            cliEngine.command(command.name, command.description)
-                .argument("<path>", "Path to generated entity with name in the end")
-                .action((args: Record<string, string>, options: Object, logger: any) => {
-                    logger.debug(`Workdir: ${this.workdir}`);
+        this.shell.generators.forEach((generator) => {
+            const config = generator.config;
+            const cliCommand = cliEngine.command(config.name, config.description)
+                .argument("<path>", "Path to generated entity with name in the end");
 
-                    const result = this.shell.run(this.workdir, command.name, args.path);
+            config.optionalOutput.forEach((fileDescription) => {
+                if (fileDescription.optionName) {
+                    cliCommand.option(
+                        fileDescription.optionName,
+                        fileDescription.optionDescription,
+                        cliEngine.BOOL
+                    );
+                }
+            });
 
-                    console.warn(result);
-                });
+            cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: any) => {
+                logger.debug(`Workdir: ${this.workdir}`);
+
+                const optionsList = this.getEnabledBooleanOptions(options);
+                const result = this.shell.run(this.workdir, config.name, args.path, optionsList);
+
+                console.warn(result);
+            });
+        });
+    }
+
+    private getEnabledBooleanOptions(options: Record<string, any>): Array<string> {
+        return Object.keys(options).filter((option) => {
+            return options[option] === true;
         });
     }
 }

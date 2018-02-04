@@ -5,7 +5,7 @@ module.exports = {
             description: "Generates NG2 component and empty styles file",
             namingConvention: "pascalCase", // default val
             createDirectory: true, // default val,
-            templateVars: function(input, predefinedSettings) {
+            templateVars: function(input, predefinedVars) {
                 return {
                     testVar: "TESTCONTENT"
                 };
@@ -14,15 +14,12 @@ module.exports = {
                 {
                     templatePath: "./templates/component-ng2.ejs",
                     name: data => `${data.name.kebabCase}.component.ts`
-                },
+                }
+            ],
+            optionalOutput: [
                 {
-                    // if file contains "optional" field - engine generates it only if user added corresponding flag
-                    // to the command
-                    optional: {
-                        name: "styles",
-                        shortName: "s",
-                        description: "include styles file"
-                    },
+                    optionName: "--styles",
+                    optionDescription: "include styles file",
                     name: data => "_styles.scss"
                 }
             ]
