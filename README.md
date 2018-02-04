@@ -3,8 +3,6 @@ Tiny scaffolding tool for your project
 
 [![Build Status](https://travis-ci.org/arodik/makestuff.js.svg?branch=master)](https://travis-ci.org/arodik/makestuff.js)
 [![bitHound Overall Score](https://www.bithound.io/github/arodik/makestuff.js/badges/score.svg)](https://www.bithound.io/github/arodik/makestuff.js)
-[![dependencies Status](https://david-dm.org/arodik/makestuff.js/status.svg)](https://david-dm.org/arodik/makestuff.js)
-[![devDependencies Status](https://david-dm.org/arodik/makestuff.js/dev-status.svg)](https://david-dm.org/arodik/makestuff.js?type=dev)
 
 **!! Currently under developing !! Please don't use this until the first release**
 
