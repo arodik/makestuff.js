@@ -1,5 +1,6 @@
 import {IMakestuffConfig, INormalizedOutputFile} from "../generator/interfaces";
 import GeneratorShell from "../shell/shell";
+import {ConsoleReporter} from "../reporter/console-reporter";
 
 export default class MakestuffCli {
     private shell: GeneratorShell;
@@ -30,12 +31,13 @@ export default class MakestuffCli {
             this.registerUniqOptions(config.optionalOutput, cliCommand, cliEngine);
 
             cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
+                const reporter = new ConsoleReporter(logger);
                 logger.debug(`Workdir: ${this.workdir}`);
 
                 const optionsList = this.getEnabledBooleanOptions(options);
                 const result = this.shell.run(this.workdir, config.name, args.path, optionsList);
 
-                console.warn(result);
+                reporter.printGeneratorResult(result);
             });
         });
     }
