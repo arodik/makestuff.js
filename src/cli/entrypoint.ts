@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import Caporal from "caporal";
+import * as Caporal from "caporal";
 import * as Chalk from "chalk";
 import * as path from "path";
 import ErrorCodes from "./error-codes";
