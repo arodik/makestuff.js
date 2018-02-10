@@ -14,6 +14,8 @@ export type ExecutionResult = {
 };
 
 export default class Generator {
+    static allOptionName = "full";
+
     constructor(public readonly config: IStrictGeneratorConfig) {
     }
 
@@ -55,7 +57,14 @@ export default class Generator {
         workingDir: string,
         rawEntityName: string
     ): Array<INormalizedOutputFile> {
-        return this.getNormalizedFiles(this.config.optionalOutput, workingDir, rawEntityName, options)
+        const allFiles = this.getNormalizedFiles(this.config.optionalOutput, workingDir, rawEntityName, options);
+        const allOptionEnabled = options.indexOf(Generator.allOptionName) !== -1;
+
+        if (allOptionEnabled) {
+            return allFiles;
+        }
+
+        return allFiles
             .filter((file) => options.indexOf(file.optionName) !== -1);
     }
 

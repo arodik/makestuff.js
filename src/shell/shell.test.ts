@@ -223,6 +223,28 @@ describe("shell", function () {
             expect(resultFileContent).toBe(testContent);
         });
 
+        test("`full` option enables all options", function() {
+            generator.setupGenerator({
+                name: "component",
+                output: [{name: "empty"}],
+                optionalOutput: [
+                    {optionName: "-o1", name: "optional1"},
+                    {optionName: "-o2", name: "optional2"},
+                    {optionName: "-o3", name: "optional3"},
+                    {optionName: "-o4", name: "optional4"},
+                ]
+            });
+
+            const expectedCreatedCount = 5;
+            const result = generator.run(
+                testWorkingDir,
+                "component",
+                testComponentPath,
+                ["full"]
+            );
+            expect(result.created.length).toBe(expectedCreatedCount);
+        });
+
         test("template has access to options", function() {
             const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
             const compiledTemplate = "custom-detected";
