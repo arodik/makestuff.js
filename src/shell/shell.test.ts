@@ -188,7 +188,7 @@ describe("shell", function () {
                 optionalOutput: [
                     {
                         optionName: "-o, --optional",
-                        name: "optional-empty",
+                        name: "optional",
                         template: testContent
                     },
                     {
@@ -212,7 +212,7 @@ describe("shell", function () {
                 optionalOutput: [
                     {
                         optionName: "-o",
-                        name: "optional-empty",
+                        name: "optional",
                         template: testContent
                     }
                 ]
