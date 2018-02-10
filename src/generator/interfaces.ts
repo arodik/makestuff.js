@@ -64,5 +64,9 @@ export interface IGeneratorCallbackData {
         snakeCase: string;
         dotCase: string;
     };
+    command: {
+        name: string;
+        options: Record<string, any>;
+    };
     options: Record<string, any>;
 }
