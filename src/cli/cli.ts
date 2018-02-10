@@ -39,6 +39,8 @@ export default class MakestuffCli {
 
                 reporter.printGeneratorResult(result);
             });
+
+            this.registerFullOption(cliCommand, cliEngine);
         });
     }
 
@@ -62,6 +64,11 @@ export default class MakestuffCli {
                 uniqOptions.add(fileDescription.optionName);
             }
         });
+    }
+
+    // add option that enables all other options
+    private registerFullOption(cliCommand: Command, cliEngine: Caporal) {
+        cliCommand.option("--full", "Enable all options", cliEngine.BOOL);
     }
 
     private getEnabledBooleanOptions(options: Record<string, any>): Array<string> {
