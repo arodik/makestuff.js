@@ -162,6 +162,8 @@ export default class Generator {
     }
 
     private getGeneratorCallbackData(name: string, options: Array<string>): IGeneratorCallbackData {
+        const optionsDictionary = this.createDummyOptionsDictionary(options);
+
         return {
             name: {
                 raw: name,
@@ -173,7 +175,12 @@ export default class Generator {
                 snakeCase: StringExtension.snakeCase(name),
                 dotCase: StringExtension.dotCase(name)
             },
-            options: this.createDummyOptionsDictionary(options)
+            command: {
+                name: this.config.name,
+                options: optionsDictionary,
+            },
+            // TODO: remove it in 2.0, use command.options instead
+            options: optionsDictionary
         };
     }
 

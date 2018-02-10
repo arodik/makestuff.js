@@ -178,6 +178,29 @@ describe("shell", function () {
         expect(content).toBe(testContent);
     });
 
+    test("template has access to the command's name", function() {
+        const commandName = "component";
+        const template = "<%- command.name %>";
+
+        generator.setupGenerator({
+            name: commandName,
+            output: [
+                {
+                    name: "command-name-test",
+                    template
+                },
+            ]
+        });
+
+        const result = generator.run(testWorkingDir, "component", testComponentPath);
+        const content = fs.readFileSync(
+            result.created[0],
+            "UTF-8"
+        );
+
+        expect(content).toBe(commandName);
+    });
+
     describe("ability to add additional files via options", function() {
         const testContent = "test";
 
