@@ -178,28 +178,74 @@ describe("shell", function () {
         expect(content).toBe(testContent);
     });
 
-    test("template has access to options", function() {
-        const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
-        const compiledTemplate = "custom-detected";
+    describe("ability to add additional files via options", function() {
+        const testContent = "test";
 
-        const fileFromStringTemplate = {
-            name: "from-string-template.test",
-            template: templateWithCustomOption
-        };
+        test("use long and short options", function() {
+            generator.setupGenerator({
+                name: "component",
+                output: [{name: "empty"}],
+                optionalOutput: [
+                    {
+                        optionName: "-o, --optional",
+                        name: "optional",
+                        template: testContent
+                    },
+                    {
+                        optionName: "-n --never",
+                        name: "never-created"
+                    }
+                ]
+            });
 
-        generator.setupGenerator({
-            name: "component",
-            output: [fileFromStringTemplate]
+            const result = generator.run(testWorkingDir, "component", testComponentPath, ["optional"]);
+            expect(result.created.length).toBe(2);
+
+            const resultFileContent = fs.readFileSync(result.created[1], "UTF-8");
+            expect(resultFileContent).toBe(testContent);
         });
 
-        const result = generator.run(
-            testWorkingDir,
-            "component",
-            testComponentPath,
-            ["myTestOption"]
-        );
-        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+        test("use only short options", function() {
+            generator.setupGenerator({
+                name: "component",
+                output: [{name: "empty"}],
+                optionalOutput: [
+                    {
+                        optionName: "-o",
+                        name: "optional",
+                        template: testContent
+                    }
+                ]
+            });
 
-        expect(resultFileContent).toBe(compiledTemplate);
+            const result = generator.run(testWorkingDir, "component", testComponentPath, ["o"]);
+            const resultFileContent = fs.readFileSync(result.created[1], "UTF-8");
+            expect(resultFileContent).toBe(testContent);
+        });
+
+        test("template has access to options", function() {
+            const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
+            const compiledTemplate = "custom-detected";
+
+            const fileFromStringTemplate = {
+                name: "from-string-template.test",
+                template: templateWithCustomOption
+            };
+
+            generator.setupGenerator({
+                name: "component",
+                output: [fileFromStringTemplate]
+            });
+
+            const result = generator.run(
+                testWorkingDir,
+                "component",
+                testComponentPath,
+                ["myTestOption"]
+            );
+            const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+
+            expect(resultFileContent).toBe(compiledTemplate);
+        });
     });
 });

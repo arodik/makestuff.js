@@ -18,7 +18,7 @@ module.exports = {
             ],
             optionalOutput: [
                 {
-                    optionName: "--styles",
+                    optionName: "-s, --styles",
                     optionDescription: "include styles file",
                     name: "_styles.scss"
                 }

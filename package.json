@@ -54,7 +54,10 @@
     "generate",
     "make",
     "create",
-    "file"
+    "file",
+    "cli",
+    "cli-app",
+    "boilerplate"
   ],
   "repository": {
     "type": "git",

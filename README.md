@@ -34,7 +34,7 @@ module.exports = {
             optionalOutput: [
                 {
                     // name of your option
-                    optionName: "--styles",
+                    optionName: "-s, --styles",
                     optionDescription: "create an empty styles file",
                     // name of generated file
                     name: "_styles.scss"
@@ -137,7 +137,7 @@ const componentGenerator = {
    // Optional files creators accessed via CLI options
    optionalOutput: [
        {
-           optionName: "--styles",
+           optionName: "-s, --styles",
            optionDescription: "include styles file",
            name: "_styles.scss"
        }
