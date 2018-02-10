@@ -93,10 +93,22 @@ export default class Generator {
 
     private cleanOptionName(optionName?: string): string {
         if (optionName) {
-            return optionName.replace(/-/g, "");
+            const name = this.getNameParts(optionName);
+            return name.long || name.short || "";
         }
 
         return "";
+    }
+
+    private getNameParts(name: string): {short: string, long: string} {
+        const withoutSpecialSymbols = name.replace(/[-,]/g, "");
+        const withOneWhitespace = withoutSpecialSymbols.replace(/[\s]+/g, " ");
+        const shortAndLongParts = withOneWhitespace.split(" ");
+
+        return {
+            short: shortAndLongParts[0],
+            long: shortAndLongParts[1]
+        };
     }
 
     private createTemplate(
