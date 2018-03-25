@@ -1,8 +1,9 @@
 import {
-    IGeneratorConfig, INormalizedOutputFile, IOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
+    IGeneratorConfig, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
 } from "./interfaces";
 import {Prop} from "../decorators";
-import {InvalidConfigValueError} from "./error/invalid-config-value";
+import {Exception} from "../error/utils";
+import {MakestuffErrors} from "../error/list";
 
 export default class GeneratorConfig implements IStrictGeneratorConfig {
     private props: IStrictGeneratorConfig;
@@ -22,22 +23,30 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
         this.props = this.normalizeConfig(originalUserConfig);
     }
 
-    // TODO: remove custom errors, use default instead
     private validateConfig(config: IGeneratorConfig) {
         if (!config.name) {
-            throw new InvalidConfigValueError("Name for generator is not specified");
+            throw Exception(
+                MakestuffErrors.invalidConfigValueError,
+                "Name for generator is not specified"
+            );
         }
 
         // Naming convention might be empty, it'll be initialized later by default value
         if (config.namingConvention !== void 0) {
             if (!this.checkNamingConvention(config.namingConvention)) {
-                throw new InvalidConfigValueError(`Invalid naming convention ${config.namingConvention}`);
+                throw Exception(
+                    MakestuffErrors.invalidConfigValueError,
+                    `Invalid naming convention ${config.namingConvention}`
+                );
             }
         }
 
         if (Array.isArray(config.output)) {
             if (!config.output.length) {
-                throw new InvalidConfigValueError("You must specify at least one output file");
+                throw Exception(
+                    MakestuffErrors.invalidConfigValueError,
+                    "You must specify at least one output file"
+                );
             }
         }
 

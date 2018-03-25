@@ -6,20 +6,12 @@ export default class MakestuffCli {
     private shell: GeneratorShell;
 
     constructor(private workdir: string, private config: IMakestuffConfig) {
-        this.setupShell(this.config);
+        this.shell = new GeneratorShell(this.config);
     }
 
     run(cliEngine: Caporal) {
         this.setupCli(cliEngine);
         cliEngine.parse(process.argv);
-    }
-
-    private setupShell(config: IMakestuffConfig) {
-        this.shell = new GeneratorShell();
-
-        config.commands.forEach((generatorConfig) => {
-            this.shell.setupGenerator(generatorConfig);
-        });
     }
 
     private setupCli(cliEngine: Caporal) {

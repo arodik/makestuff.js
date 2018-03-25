@@ -1,6 +1,7 @@
 export type NamingConvention = "camelCase" | "pascalCase" | "kebabCase" | "trainCase" | "snakeCase" | "dotCase";
 
 export interface IMakestuffConfig {
+    requireVersion?: string;
     commands: Array<IGeneratorConfig>;
 }
 

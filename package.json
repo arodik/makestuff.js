@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@types/node": "^9.6.0",
+    "@types/semver": "^5.5.0",
     "caporal": "^0.10.0",
     "chalk": "^2.3.2",
     "ejs": "^2.5.7",
     "mkdirp": "^0.5.1",
+    "semver": "^5.5.0",
     "tslib": "^1.9.0",
     "typescript": "^2.7.2"
   },
