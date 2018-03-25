@@ -178,6 +178,12 @@ export default class Generator {
             command: {
                 name: this.config.name,
                 options: optionsDictionary,
+                optionEnabled: (optionName: string) => {
+                    const allOptionEnabled = Boolean(optionsDictionary[Generator.allOptionName]);
+                    const particularOptionEnabled = Boolean(optionsDictionary[optionName]);
+
+                    return allOptionEnabled || particularOptionEnabled;
+                }
             },
             // TODO: remove it in 2.0, use command.options instead
             options: optionsDictionary

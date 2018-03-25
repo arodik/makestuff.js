@@ -67,6 +67,7 @@ export interface IGeneratorCallbackData {
     command: {
         name: string;
         options: Record<string, any>;
+        optionEnabled: (optionName: string) => boolean;
     };
     options: Record<string, any>;
 }
