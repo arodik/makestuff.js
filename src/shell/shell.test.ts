@@ -17,15 +17,18 @@ function getAbsPathTo(destination: string): string {
 }
 
 describe("shell", function () {
-    let generator: GeneratorShell;
-
-    beforeEach(function () {
-        generator = new GeneratorShell();
-    });
-
     afterEach(function () {
         FsExtension.deleteFolderRecursive(dirWithTests);
         FsExtension.deleteFolderRecursive(absoluteDir);
+    });
+
+    test("throw error if required version is bigger than actual", function() {
+        expect(function() {
+            const generator = new GeneratorShell({
+                requireVersion: "9999.0.0",
+                commands: [{name: "t", output: ["test"]}]
+            });
+        }).toThrowError();
     });
 
     test("can create empty files with proper names", function () {
@@ -42,9 +45,13 @@ describe("shell", function () {
                 {name: (data: IGeneratorCallbackData) => `dc.${data.name.dotCase}.test`},
             ];
 
-        generator.setupGenerator({
-            name: "component",
-            output: testFiles
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    output: testFiles
+                }
+            ]
         });
 
         const result = generator.run(testWorkingDir, "component", testCommandPath);
@@ -82,10 +89,14 @@ describe("shell", function () {
 
         FsExtension.writeFile(absolutePathFile.templatePath, simpleTemplate);
 
-        generator.setupGenerator({
-            name: "component",
-            templatesRoot: templatesRootPath,
-            output: [absolutePathFile]
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    templatesRoot: templatesRootPath,
+                    output: [absolutePathFile]
+                }
+            ]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -103,10 +114,14 @@ describe("shell", function () {
         const properPathToTemplate = path.resolve(testWorkingDir, templatesRootPath, relativePathFile.templatePath);
         FsExtension.writeFile(properPathToTemplate, simpleTemplate);
 
-        generator.setupGenerator({
-            name: "component",
-            templatesRoot: templatesRootPath,
-            output: [relativePathFile]
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    templatesRoot: templatesRootPath,
+                    output: [relativePathFile]
+                }
+            ]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -123,9 +138,13 @@ describe("shell", function () {
             template: simpleTemplate
         };
 
-        generator.setupGenerator({
-            name: "component",
-            output: [fileFromStringTemplate]
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    output: [fileFromStringTemplate]
+                }
+            ]
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
@@ -135,17 +154,20 @@ describe("shell", function () {
     });
 
     test("must throw the error if template file doesn't exists", function () {
-        generator.setupGenerator({
-            name: "component",
-            output: [
+        const generator = new GeneratorShell({
+            commands: [
                 {
-                    name: "absolute.test",
-                    templatePath: getAbsPathTo("non-existing-template.tpl")
+                    name: "component",
+                    output: [
+                        {
+                            name: "absolute.test",
+                            templatePath: getAbsPathTo("non-existing-template.tpl")
+                        }
+                    ]
                 }
             ]
         });
 
-        // TODO: throw the typed error
         expect(function () {
             const result = generator.run(dirWithTests, "component", testComponentPath);
         }).toThrowError();
@@ -154,15 +176,19 @@ describe("shell", function () {
     test("can get additional template variables from config file", function () {
         const testContent = "111";
 
-        generator.setupGenerator({
-            name: "component",
-            templateVars: function (input, predefinedSettings) {
-                return {
-                    testVar: testContent
-                };
-            },
-            output: [
-                {name: "additional-fields.test", template: "<%- custom.testVar %>"},
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    templateVars: function (input, predefinedSettings) {
+                        return {
+                            testVar: testContent
+                        };
+                    },
+                    output: [
+                        {name: "additional-fields.test", template: "<%- custom.testVar %>"},
+                    ]
+                }
             ]
         });
 
@@ -182,13 +208,17 @@ describe("shell", function () {
         const commandName = "component";
         const template = "<%- command.name %>";
 
-        generator.setupGenerator({
-            name: commandName,
-            output: [
+        const generator = new GeneratorShell({
+            commands: [
                 {
-                    name: "command-name-test",
-                    template
-                },
+                    name: commandName,
+                    output: [
+                        {
+                            name: "command-name-test",
+                            template
+                        },
+                    ]
+                }
             ]
         });
 
@@ -205,18 +235,22 @@ describe("shell", function () {
         const testContent = "test";
 
         test("use long and short options", function() {
-            generator.setupGenerator({
-                name: "component",
-                output: [{name: "empty"}],
-                optionalOutput: [
+            const generator = new GeneratorShell({
+                commands: [
                     {
-                        optionName: "-o, --optional",
-                        name: "optional",
-                        template: testContent
-                    },
-                    {
-                        optionName: "-n --never",
-                        name: "never-created"
+                        name: "component",
+                        output: [{name: "empty"}],
+                        optionalOutput: [
+                            {
+                                optionName: "-o, --optional",
+                                name: "optional",
+                                template: testContent
+                            },
+                            {
+                                optionName: "-n --never",
+                                name: "never-created"
+                            }
+                        ]
                     }
                 ]
             });
@@ -229,14 +263,18 @@ describe("shell", function () {
         });
 
         test("use only short options", function() {
-            generator.setupGenerator({
-                name: "component",
-                output: [{name: "empty"}],
-                optionalOutput: [
+            const generator = new GeneratorShell({
+                commands: [
                     {
-                        optionName: "-o",
-                        name: "optional",
-                        template: testContent
+                        name: "component",
+                        output: [{name: "empty"}],
+                        optionalOutput: [
+                            {
+                                optionName: "-o",
+                                name: "optional",
+                                template: testContent
+                            }
+                        ]
                     }
                 ]
             });
@@ -247,14 +285,18 @@ describe("shell", function () {
         });
 
         test("`full` option enables all options", function() {
-            generator.setupGenerator({
-                name: "component",
-                output: [{name: "empty"}],
-                optionalOutput: [
-                    {optionName: "-o1", name: "optional1"},
-                    {optionName: "-o2", name: "optional2"},
-                    {optionName: "-o3", name: "optional3"},
-                    {optionName: "-o4", name: "optional4"},
+            const generator = new GeneratorShell({
+                commands: [
+                    {
+                        name: "component",
+                        output: [{name: "empty"}],
+                        optionalOutput: [
+                            {optionName: "-o1", name: "optional1"},
+                            {optionName: "-o2", name: "optional2"},
+                            {optionName: "-o3", name: "optional3"},
+                            {optionName: "-o4", name: "optional4"},
+                        ]
+                    }
                 ]
             });
 
@@ -277,9 +319,13 @@ describe("shell", function () {
                 template: templateWithCustomOption
             };
 
-            generator.setupGenerator({
-                name: "component",
-                output: [fileFromStringTemplate]
+            const generator = new GeneratorShell({
+                commands: [
+                    {
+                        name: "component",
+                        output: [fileFromStringTemplate]
+                    }
+                ]
             });
 
             const result = generator.run(

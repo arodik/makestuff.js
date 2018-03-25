@@ -2,10 +2,11 @@
 import * as Caporal from "caporal";
 import * as Chalk from "chalk";
 import * as path from "path";
-import ErrorCodes from "./error-codes";
 import MakestuffCli from "./cli";
 import Config from "../extensions/config";
 import {IMakestuffConfig} from "../generator/interfaces";
+import {getErrorInfo} from "../error/utils";
+import {MakestuffErrors} from "../error/list";
 
 const configPath = Config.locate(process.cwd());
 
@@ -17,11 +18,21 @@ if (configPath) {
     const packageInfo = require("../../package.json");
     Caporal.version(packageInfo.version);
 
-    const makestuffCli = new MakestuffCli(workingDir, makestuffConfig);
+    try {
+        const makestuffCli = new MakestuffCli(workingDir, makestuffConfig);
+        makestuffCli.run(Caporal);
+    } catch (error) {
+        const errorInfo = getErrorInfo(error);
+        if (errorInfo) {
+            console.error(Chalk.red(errorInfo.message));
+            process.exit(errorInfo.code);
+        }
 
-    makestuffCli.run(Caporal);
+        console.error(Chalk.bold.red(error));
+        process.exit(MakestuffErrors.unknownError.code);
+    }
 } else {
     console.error(Chalk.red("Can't find " + Config.fileName + " or package.json that contains information about " +
         "Makestuff config path"));
-    process.exit(ErrorCodes.cantFindConfig);
+    process.exit(MakestuffErrors.cantFindConfig.code);
 }
