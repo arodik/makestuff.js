@@ -22,7 +22,7 @@ if (configPath) {
         const makestuffCli = new MakestuffCli(workingDir, makestuffConfig);
         makestuffCli.run(Caporal);
     } catch (error) {
-        const errorInfo = getErrorInfo(error.message);
+        const errorInfo = getErrorInfo(error);
         if (errorInfo) {
             console.error(Chalk.red(errorInfo.message));
             process.exit(errorInfo.code);

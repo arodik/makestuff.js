@@ -1,30 +1,28 @@
 import {MakestuffErrors} from "./list";
 
-const errorDivider = "*-*ERROR-DIVIDER*-*";
+interface CustomError extends Error {
+    type: string;
+}
 
 interface ErrorInfo {
-    id: string;
+    type: string;
     code: number;
     message: string;
 }
 
 export function Exception(type: string, message: string): Error {
-    return new Error(createErrorString(type, message));
+    const newError = new Error(message) as CustomError;
+    newError.type = type;
+    return newError;
 }
 
-function createErrorString(type: string, message: string): string {
-    return type + errorDivider + message;
-}
-
-export function getErrorInfo(error: string): ErrorInfo | null {
-    if (error) {
-        const [id, message] = error.split(errorDivider);
-
-        const makestuffError = MakestuffErrors[id];
+export function getErrorInfo(error: CustomError): ErrorInfo | null {
+    if (error.type) {
+        const makestuffError = MakestuffErrors[error.type];
         if (makestuffError) {
             return {
-                id,
-                message,
+                type: error.type,
+                message: error.message,
                 code: makestuffError.code
             };
         }
