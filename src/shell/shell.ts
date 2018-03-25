@@ -22,8 +22,10 @@ export default class GeneratorShell {
 
             if (!makestuffVersionIsCorrect) {
                 throw Exception(
-                    MakestuffErrors.incorrectMakestuffVersion,
-                    `You have version ${makestuffVersion} but you need ${config.requireVersion}`
+                    MakestuffErrors.incorrectMakestuffVersion.id,
+                    "Your Makestuff is too old :( \n"
+                     + `Your version is ${makestuffVersion} but you need ${config.requireVersion} \n`
+                     + "Execute the following command to update: `npm update -g makestuff`"
                 );
             }
         }
@@ -48,7 +50,7 @@ export default class GeneratorShell {
         const generator = this.findGeneratorByName(generatorName);
         if (!generator) {
             throw Exception(
-                MakestuffErrors.wrongGeneratorNameError,
+                MakestuffErrors.wrongGeneratorNameError.id,
                 `Can't find generator with name ${generatorName}`
             );
         }

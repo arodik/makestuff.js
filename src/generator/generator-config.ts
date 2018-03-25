@@ -26,7 +26,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     private validateConfig(config: IGeneratorConfig) {
         if (!config.name) {
             throw Exception(
-                MakestuffErrors.invalidConfigValueError,
+                MakestuffErrors.invalidConfigValueError.id,
                 "Name for generator is not specified"
             );
         }
@@ -35,7 +35,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
         if (config.namingConvention !== void 0) {
             if (!this.checkNamingConvention(config.namingConvention)) {
                 throw Exception(
-                    MakestuffErrors.invalidConfigValueError,
+                    MakestuffErrors.invalidConfigValueError.id,
                     `Invalid naming convention ${config.namingConvention}`
                 );
             }
@@ -44,7 +44,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
         if (Array.isArray(config.output)) {
             if (!config.output.length) {
                 throw Exception(
-                    MakestuffErrors.invalidConfigValueError,
+                    MakestuffErrors.invalidConfigValueError.id,
                     "You must specify at least one output file"
                 );
             }
