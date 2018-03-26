@@ -1,5 +1,5 @@
 import {ExecutionResult} from "../generator/generator";
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 export class ConsoleReporter {
     constructor(private logger: Logger) {
