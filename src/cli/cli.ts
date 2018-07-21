@@ -27,7 +27,7 @@ export default class MakestuffCli {
             .argument("<path>", "Path to generated entity with name in the end");
 
         this.registerOutputOptions(config.optionalOutput, cliCommand, cliEngine);
-        this.registerOptions(config.options, cliCommand);
+        this.registerOptions(config.options, cliCommand, cliEngine);
 
         cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
             const reporter = new ConsoleReporter(logger);
@@ -42,9 +42,9 @@ export default class MakestuffCli {
         this.registerFullOption(cliCommand, cliEngine);
     }
 
-    private registerOptions(options: Array<INormalizedOption>, cliCommand: Command) {
+    private registerOptions(options: Array<INormalizedOption>, cliCommand: Command, cliEngine: Caporal) {
         options.forEach((option) => {
-            cliCommand.option(option.name, option.description);
+            cliCommand.option(option.name, option.description, cliEngine.BOOL);
         });
     }
 
