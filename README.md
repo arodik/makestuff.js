@@ -3,7 +3,6 @@ Makestuff is a tiny tool that allows you to create and execute your own simple s
 You can automatically create boring boilerplate stuff in your project.
 
 [![Build Status](https://travis-ci.org/arodik/makestuff.js.svg?branch=master)](https://travis-ci.org/arodik/makestuff.js)
-[![bitHound Overall Score](https://www.bithound.io/github/arodik/makestuff.js/badges/score.svg)](https://www.bithound.io/github/arodik/makestuff.js)
 
 ----------------
 
