@@ -1,8 +1,8 @@
 module.exports = {
     commands: [
         {
-            name: "component-ng2",
-            description: "Generates NG2 component and empty styles file",
+            name: "component",
+            description: "Generates component and empty styles file",
             namingConvention: "pascalCase", // default val
             createDirectory: true, // default val,
             templateVars: function(input, predefinedVars) {
@@ -14,6 +14,12 @@ module.exports = {
                 {
                     templatePath: "./templates/component-ng2.ejs",
                     name: data => `${data.name.kebabCase}.component.ts`
+                }
+            ],
+            options: [
+                {
+                    name: "-t, --test",
+                    description: "Test option (does nothing)",
                 }
             ],
             optionalOutput: [

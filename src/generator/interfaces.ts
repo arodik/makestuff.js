@@ -22,6 +22,16 @@ export interface INormalizedOutputFile {
     optionDescription: string;
 }
 
+export interface IOption {
+    name: string;
+    description?: string;
+}
+
+export interface INormalizedOption {
+    name: string;
+    description: string;
+}
+
 export interface IGeneratorConfig {
     name: string;
     description?: string;
@@ -32,6 +42,7 @@ export interface IGeneratorConfig {
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<TOutputFile>;
     optionalOutput?: Array<IOutputFile>;
+    options?: Array<IOption>;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -43,6 +54,7 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<INormalizedOutputFile>;
     optionalOutput: Array<INormalizedOutputFile>;
+    options: Array<INormalizedOption>;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

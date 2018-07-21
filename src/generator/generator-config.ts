@@ -1,5 +1,5 @@
 import {
-    IGeneratorConfig, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
+    IGeneratorConfig, INormalizedOption, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
 } from "./interfaces";
 import {Prop} from "../decorators";
 import {Exception} from "../error/utils";
@@ -16,6 +16,8 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() flags: ISettingsFlags;
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     @Prop() output: Array<INormalizedOutputFile>;
+    @Prop() options: Array<INormalizedOption>;
+
     /**
      * @deprecated
      */
@@ -78,6 +80,14 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
 
         if (!Array.isArray(config.output)) {
             normalizedConfig.output = [];
+        }
+
+        if (Array.isArray(config.options)) {
+            config.options.forEach((option) => {
+                option.description = option.description || "";
+            });
+        } else {
+            normalizedConfig.options = [];
         }
 
         if (!Array.isArray(config.optionalOutput)) {

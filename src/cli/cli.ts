@@ -1,4 +1,4 @@
-import {IMakestuffConfig, INormalizedOutputFile} from "../generator/interfaces";
+import {IMakestuffConfig, INormalizedOption, INormalizedOutputFile} from "../generator/interfaces";
 import GeneratorShell from "../shell/shell";
 import {ConsoleReporter} from "../reporter/console-reporter";
 
@@ -20,7 +20,8 @@ export default class MakestuffCli {
             const cliCommand = cliEngine.command(config.name, config.description)
                 .argument("<path>", "Path to generated entity with name in the end");
 
-            this.registerUniqOptions(config.optionalOutput, cliCommand, cliEngine);
+            this.registerOutputOptions(config.optionalOutput, cliCommand, cliEngine);
+            this.registerOptions(config.options, cliCommand);
 
             cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
                 const reporter = new ConsoleReporter(logger);
@@ -36,7 +37,12 @@ export default class MakestuffCli {
         });
     }
 
-    private registerUniqOptions(
+    private registerOptions(options: Array<INormalizedOption>, cliCommand: Command) {
+        options.forEach((option) => {
+            cliCommand.option(option.name, option.description);
+        });
+    }
+
     /**
      * @deprecated
      */
