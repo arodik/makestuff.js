@@ -4,6 +4,9 @@
   "description": "Tiny scaffolding tool for your project",
   "license": "MIT",
   "main": "dist/shell/shell.js",
+  "engines": {
+    "node": ">=6"
+  },
   "bin": {
     "makestuff": "dist/cli/entrypoint.js"
   },
@@ -15,7 +18,7 @@
     "build": "tsc",
     "test": "jest",
     "test-watch": "jest --watchAll",
-    "postinstall": "npm run build"
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "@types/node": "^9.6.23",
