@@ -1,3 +1,4 @@
+import Generator from "../generator/generator";
 import {IMakestuffConfig, INormalizedOption, INormalizedOutputFile} from "../generator/interfaces";
 import GeneratorShell from "../shell/shell";
 import {ConsoleReporter} from "../reporter/console-reporter";
@@ -16,25 +17,29 @@ export default class MakestuffCli {
 
     private setupCli(cliEngine: Caporal) {
         this.shell.generators.forEach((generator) => {
-            const config = generator.config;
-            const cliCommand = cliEngine.command(config.name, config.description)
-                .argument("<path>", "Path to generated entity with name in the end");
-
-            this.registerOutputOptions(config.optionalOutput, cliCommand, cliEngine);
-            this.registerOptions(config.options, cliCommand);
-
-            cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
-                const reporter = new ConsoleReporter(logger);
-                logger.debug(`Workdir: ${this.workdir}`);
-
-                const optionsList = this.getEnabledBooleanOptions(options);
-                const result = this.shell.run(this.workdir, config.name, args.path, optionsList);
-
-                reporter.printGeneratorResult(result);
-            });
-
-            this.registerFullOption(cliCommand, cliEngine);
+            this.setupGenerator(generator, cliEngine);
         });
+    }
+
+    private setupGenerator(generator: Generator, cliEngine: Caporal) {
+        const config = generator.config;
+        const cliCommand = cliEngine.command(config.name, config.description)
+            .argument("<path>", "Path to generated entity with name in the end");
+
+        this.registerOutputOptions(config.optionalOutput, cliCommand, cliEngine);
+        this.registerOptions(config.options, cliCommand);
+
+        cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
+            const reporter = new ConsoleReporter(logger);
+            logger.debug(`Workdir: ${this.workdir}`);
+
+            const optionsList = this.getEnabledBooleanOptions(options);
+            const result = this.shell.run(this.workdir, config.name, args.path, optionsList);
+
+            reporter.printGeneratorResult(result);
+        });
+
+        this.registerFullOption(cliCommand, cliEngine);
     }
 
     private registerOptions(options: Array<INormalizedOption>, cliCommand: Command) {
