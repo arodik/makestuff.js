@@ -37,11 +37,19 @@ export default class MakestuffCli {
     }
 
     private registerUniqOptions(
+    /**
+     * @deprecated
+     */
+    private registerOutputOptions(
         outputFiles: Array<INormalizedOutputFile>,
         cliCommand: Command,
         cliEngine: Caporal
     ) {
         const uniqOptions = new Set();
+
+        if (outputFiles.length) {
+            console.warn("WARN: optionalOutput directive is deprecated. It'll be removed soon. Use `options` instead.");
+        }
 
         outputFiles.forEach((fileDescription) => {
             const optionExists = uniqOptions.has(fileDescription.optionName);

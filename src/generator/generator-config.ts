@@ -16,6 +16,9 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() flags: ISettingsFlags;
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     @Prop() output: Array<INormalizedOutputFile>;
+    /**
+     * @deprecated
+     */
     @Prop() optionalOutput: Array<INormalizedOutputFile>;
 
     constructor(private originalUserConfig: IGeneratorConfig) {
