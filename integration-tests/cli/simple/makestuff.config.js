@@ -14,19 +14,16 @@ module.exports = {
                 {
                     templatePath: "./templates/component-ng2.ejs",
                     name: data => `${data.name.kebabCase}.component.ts`
+                },
+                {
+                    name: "_test_.test",
+                    when: (data) => data.command.optionEnabled("test")
                 }
             ],
             options: [
                 {
                     name: "-t, --test",
-                    description: "Test option (does nothing)",
-                }
-            ],
-            optionalOutput: [
-                {
-                    optionName: "-s, --styles",
-                    optionDescription: "include styles file",
-                    name: "_styles.scss"
+                    description: "Test option",
                 }
             ]
         }

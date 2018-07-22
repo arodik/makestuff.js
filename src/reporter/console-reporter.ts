@@ -47,8 +47,9 @@ export class ConsoleReporter {
 
     private printEmptyResult() {
         const emptyResultText = "I haven't created any file, sorry :(";
-        const hintText = "Maybe your config doesn't contain rules.\n" +
-            "You can create the issue on GitHub";
+        const hintText = "Maybe your config doesn't contain rules.\n\n" +
+            "Please, create the issue on GitHub " +
+            "if you're experiencing problems or you've found a bug";
         const githubIssuesLink = "https://github.com/arodik/makestuff.js/issues";
 
         this.logger.info(chalk.bold.yellow(emptyResultText));
