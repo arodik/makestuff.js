@@ -5,12 +5,17 @@ export interface IMakestuffConfig {
     commands: Array<IGeneratorConfig>;
 }
 
+export interface IGeneratorCallback<TResult = void> {
+    (data: IGeneratorCallbackData): TResult;
+}
+
 export interface IOutputFile {
     name: ((data: IGeneratorCallbackData) => string) | string;
     optionName?: string;
     optionDescription?: string;
     template?: string;
     templatePath?: string;
+    when?: IGeneratorCallback<boolean>;
 }
 
 export type TOutputFile = string | IOutputFile;
@@ -20,6 +25,7 @@ export interface INormalizedOutputFile {
     name: string;
     optionName: string;
     optionDescription: string;
+    when: IGeneratorCallback<boolean>;
 }
 
 export interface IOption {
@@ -68,10 +74,6 @@ export interface ISettingsFlag {
     description: string;
     alternative: string;
     action: (data: any) => void;
-}
-
-export interface IGeneratorCallback {
-    (data: IGeneratorCallbackData): void;
 }
 
 export interface IGeneratorCallbackData {

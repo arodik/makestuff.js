@@ -57,8 +57,6 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
                 );
             }
         }
-
-        // TODO: validate optionalOutput items
     }
 
     private checkNamingConvention(convention: NamingConvention): boolean {
@@ -70,7 +68,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     }
 
     private normalizeConfig(config: IGeneratorConfig): IStrictGeneratorConfig {
-        const normalizedConfig = {...config};
+        const normalizedConfig = {...config} as IStrictGeneratorConfig;
 
         normalizedConfig.description = config.description || "";
         normalizedConfig.templatesRoot = config.templatesRoot || "./";
@@ -81,32 +79,32 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
             return {};
         };
 
-        if (!Array.isArray(config.output)) {
+        if (!Array.isArray(normalizedConfig.output)) {
             normalizedConfig.output = [];
         }
 
-        if (Array.isArray(config.options)) {
-            config.options.forEach((option) => {
+        if (Array.isArray(normalizedConfig.options)) {
+            normalizedConfig.options.forEach((option) => {
                 option.description = option.description || "";
             });
         } else {
             normalizedConfig.options = [];
         }
 
-        if (!Array.isArray(config.optionalOutput)) {
+        if (!Array.isArray(normalizedConfig.optionalOutput)) {
             normalizedConfig.optionalOutput = [];
         }
 
-        if (typeof config.executeBefore !== "function") {
+        if (typeof normalizedConfig.executeBefore !== "function") {
             normalizedConfig.executeBefore = function () {
             };
         }
 
-        if (typeof config.executeAfter !== "function") {
+        if (typeof normalizedConfig.executeAfter !== "function") {
             normalizedConfig.executeAfter = function () {
             };
         }
 
-        return normalizedConfig as IStrictGeneratorConfig;
+        return normalizedConfig;
     }
 }
