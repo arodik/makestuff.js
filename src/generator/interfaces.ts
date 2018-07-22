@@ -43,6 +43,8 @@ export interface IGeneratorConfig {
     output: Array<TOutputFile>;
     optionalOutput?: Array<IOutputFile>;
     options?: Array<IOption>;
+    executeBefore?: IGeneratorCallback;
+    executeAfter?: IGeneratorCallback;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -55,6 +57,8 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     output: Array<INormalizedOutputFile>;
     optionalOutput: Array<INormalizedOutputFile>;
     options: Array<INormalizedOption>;
+    executeBefore: IGeneratorCallback;
+    executeAfter: IGeneratorCallback;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {
@@ -64,6 +68,10 @@ export interface ISettingsFlag {
     description: string;
     alternative: string;
     action: (data: any) => void;
+}
+
+export interface IGeneratorCallback {
+    (data: IGeneratorCallbackData): void;
 }
 
 export interface IGeneratorCallbackData {

@@ -31,6 +31,28 @@ describe("shell", function () {
         }).toThrowError();
     });
 
+    test("executes before/after hooks correctly", function () {
+        const testCommand = {
+            name: "component",
+            output: ["test"],
+            executeBefore: () => {},
+            executeAfter: () => {},
+        };
+
+        // TODO: how to check that hooks is called with data as a first parameter?
+        const executeBeforeHook = spyOn(testCommand, "executeBefore");
+        const executeAfterHook = spyOn(testCommand, "executeAfter");
+
+        const generator = new GeneratorShell({
+            commands: [testCommand]
+        });
+
+        generator.run(testWorkingDir, "component", "test/TestComponent");
+
+        expect(executeBeforeHook).toHaveBeenCalled();
+        expect(executeAfterHook).toHaveBeenCalled();
+    });
+
     test("can create empty files with proper names", function () {
         const testCommandPath = "test/TestComponent",
             testFiles = [

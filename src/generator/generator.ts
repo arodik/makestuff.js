@@ -24,10 +24,13 @@ export default class Generator {
             pathToEntityDir = Path.dirname(normalizedPath),
             rawEntityName = Path.basename(normalizedPath),
             normalizedEntityName = this.normalizeName(rawEntityName),
+            callbackData = this.getGeneratorCallbackData(rawEntityName, options),
             result: ExecutionResult = {
                 created: [],
                 errors: []
             };
+
+        this.config.executeBefore(callbackData);
 
         const filesToCreate = [
             ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName, options),
@@ -48,6 +51,8 @@ export default class Generator {
                 result.errors.push(fullPathToFile);
             }
         });
+
+        this.config.executeAfter(callbackData);
 
         return result;
     }

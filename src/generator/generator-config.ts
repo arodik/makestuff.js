@@ -1,4 +1,5 @@
 import {
+    IGeneratorCallback,
     IGeneratorConfig, INormalizedOption, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
 } from "./interfaces";
 import {Prop} from "../decorators";
@@ -17,6 +18,8 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     @Prop() output: Array<INormalizedOutputFile>;
     @Prop() options: Array<INormalizedOption>;
+    @Prop() executeBefore: IGeneratorCallback;
+    @Prop() executeAfter: IGeneratorCallback;
 
     /**
      * @deprecated
@@ -92,6 +95,16 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
 
         if (!Array.isArray(config.optionalOutput)) {
             normalizedConfig.optionalOutput = [];
+        }
+
+        if (typeof config.executeBefore !== "function") {
+            normalizedConfig.executeBefore = function () {
+            };
+        }
+
+        if (typeof config.executeAfter !== "function") {
+            normalizedConfig.executeAfter = function () {
+            };
         }
 
         return normalizedConfig as IStrictGeneratorConfig;
