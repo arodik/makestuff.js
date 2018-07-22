@@ -1,11 +1,17 @@
 import * as Path from "path";
 import * as fs from "fs";
 import * as ejs from "ejs";
+import {truePredicate} from "../extensions/function";
 import StringExtension from "../extensions/string";
 import FileExtension from "../extensions/fs";
 import PathExtension from "../extensions/path";
 import {
-    INormalizedOutputFile, IOutputFile, IGeneratorCallbackData, IStrictGeneratorConfig, NamingConvention, TOutputFile
+    INormalizedOutputFile,
+    IOutputFile,
+    IGeneratorCallbackData,
+    IStrictGeneratorConfig,
+    NamingConvention,
+    TOutputFile,
 } from "./interfaces";
 
 export type ExecutionResult = {
@@ -24,15 +30,20 @@ export default class Generator {
             pathToEntityDir = Path.dirname(normalizedPath),
             rawEntityName = Path.basename(normalizedPath),
             normalizedEntityName = this.normalizeName(rawEntityName),
+            callbackData = this.getGeneratorCallbackData(rawEntityName, options),
             result: ExecutionResult = {
                 created: [],
                 errors: []
             };
 
-        const filesToCreate = [
+        this.config.executeBefore(callbackData);
+
+        const allPossibleFilesToCreate = [
             ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName, options),
             ...this.getOptionalFiles(options, workingDir, rawEntityName)
         ];
+
+        const filesToCreate = this.filterFilesByWhenCondition(allPossibleFilesToCreate, callbackData);
 
         const absoluteEntityDirPath = this.config.createDirectory
             ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
@@ -49,9 +60,14 @@ export default class Generator {
             }
         });
 
+        this.config.executeAfter(callbackData);
+
         return result;
     }
 
+    /**
+     * @deprecated
+     */
     private getOptionalFiles(
         options: Array<string>,
         workingDir: string,
@@ -82,7 +98,8 @@ export default class Generator {
                     name: file,
                     template: "",
                     optionName: "",
-                    optionDescription: ""
+                    optionDescription: "",
+                    when: truePredicate
                 };
             }
 
@@ -95,8 +112,18 @@ export default class Generator {
                 name,
                 template,
                 optionName: this.cleanOptionName(file.optionName),
-                optionDescription: file.optionDescription || ""
+                optionDescription: file.optionDescription || "",
+                when: file.when || truePredicate
             };
+        });
+    }
+
+    private filterFilesByWhenCondition(
+        files: Array<INormalizedOutputFile>,
+        predicateData: IGeneratorCallbackData
+    ): Array<INormalizedOutputFile> {
+        return files.filter((file) => {
+            return file.when(predicateData);
         });
     }
 

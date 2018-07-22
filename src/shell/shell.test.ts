@@ -31,6 +31,28 @@ describe("shell", function () {
         }).toThrowError();
     });
 
+    test("executes before/after hooks correctly", function () {
+        const testCommand = {
+            name: "component",
+            output: ["test"],
+            executeBefore: () => {},
+            executeAfter: () => {},
+        };
+
+        // TODO: how to check that hooks is called with data as a first parameter?
+        const executeBeforeHook = spyOn(testCommand, "executeBefore");
+        const executeAfterHook = spyOn(testCommand, "executeAfter");
+
+        const generator = new GeneratorShell({
+            commands: [testCommand]
+        });
+
+        generator.run(testWorkingDir, "component", "test/TestComponent");
+
+        expect(executeBeforeHook).toHaveBeenCalled();
+        expect(executeAfterHook).toHaveBeenCalled();
+    });
+
     test("can create empty files with proper names", function () {
         const testCommandPath = "test/TestComponent",
             testFiles = [
@@ -309,34 +331,103 @@ describe("shell", function () {
             );
             expect(result.created.length).toBe(expectedCreatedCount);
         });
+    });
 
-        test("template has access to options", function() {
-            const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
-            const compiledTemplate = "custom-detected";
+    test("template has access to options", function() {
+        const templateWithCustomOption = "<%-options.myTestOption ? 'custom-detected' : 'custom-not-detected'%>";
+        const compiledTemplate = "custom-detected";
 
-            const fileFromStringTemplate = {
-                name: "from-string-template.test",
-                template: templateWithCustomOption
-            };
+        const fileFromStringTemplate = {
+            name: "from-string-template.test",
+            template: templateWithCustomOption
+        };
+
+        const generator = new GeneratorShell({
+            commands: [
+                {
+                    name: "component",
+                    output: [fileFromStringTemplate]
+                }
+            ]
+        });
+
+        const result = generator.run(
+            testWorkingDir,
+            "component",
+            testComponentPath,
+            ["myTestOption"]
+        );
+        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+
+        expect(resultFileContent).toBe(compiledTemplate);
+    });
+
+    describe("Conditional file creation", function() {
+        test("calls predicate when creates files", function() {
+            const testPredicate = jest.fn();
+            testPredicate.mockReturnValue(true);
 
             const generator = new GeneratorShell({
                 commands: [
                     {
-                        name: "component",
-                        output: [fileFromStringTemplate]
+                        name: "test",
+                        output: [{
+                            name: "empty",
+                            when: testPredicate
+                        }],
                     }
                 ]
             });
 
-            const result = generator.run(
-                testWorkingDir,
-                "component",
-                testComponentPath,
-                ["myTestOption"]
-            );
-            const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+            generator.run(testWorkingDir, "test", testComponentPath);
 
-            expect(resultFileContent).toBe(compiledTemplate);
+            expect(testPredicate).toHaveBeenCalled();
+        });
+
+        test("creates additional file if predicate returns true", function () {
+            const generator = new GeneratorShell({
+                commands: [
+                    {
+                        name: "test",
+                        output: [
+                            {
+                                name: "empty",
+                            },
+                            {
+                                name: "empty1",
+                                when: () => true,
+                            }
+                        ],
+                    }
+                ]
+            });
+
+            const result = generator.run(testWorkingDir, "test", testComponentPath);
+
+            expect(result.created.length).toBe(2);
+        });
+
+        test("skips file creation if predicate returns false", function () {
+            const generator = new GeneratorShell({
+                commands: [
+                    {
+                        name: "test",
+                        output: [
+                            {
+                                name: "empty",
+                            },
+                            {
+                                name: "empty1",
+                                when: () => false,
+                            }
+                        ],
+                    }
+                ]
+            });
+
+            const result = generator.run(testWorkingDir, "test", testComponentPath);
+
+            expect(result.created.length).toBe(1);
         });
     });
 });

@@ -5,12 +5,17 @@ export interface IMakestuffConfig {
     commands: Array<IGeneratorConfig>;
 }
 
+export interface IGeneratorCallback<TResult = void> {
+    (data: IGeneratorCallbackData): TResult;
+}
+
 export interface IOutputFile {
     name: ((data: IGeneratorCallbackData) => string) | string;
     optionName?: string;
     optionDescription?: string;
     template?: string;
     templatePath?: string;
+    when?: IGeneratorCallback<boolean>;
 }
 
 export type TOutputFile = string | IOutputFile;
@@ -20,6 +25,17 @@ export interface INormalizedOutputFile {
     name: string;
     optionName: string;
     optionDescription: string;
+    when: IGeneratorCallback<boolean>;
+}
+
+export interface IOption {
+    name: string;
+    description?: string;
+}
+
+export interface INormalizedOption {
+    name: string;
+    description: string;
 }
 
 export interface IGeneratorConfig {
@@ -32,6 +48,9 @@ export interface IGeneratorConfig {
     templateVars?: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<TOutputFile>;
     optionalOutput?: Array<IOutputFile>;
+    options?: Array<IOption>;
+    executeBefore?: IGeneratorCallback;
+    executeAfter?: IGeneratorCallback;
 }
 
 export interface IStrictGeneratorConfig extends IGeneratorConfig {
@@ -43,6 +62,9 @@ export interface IStrictGeneratorConfig extends IGeneratorConfig {
     templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     output: Array<INormalizedOutputFile>;
     optionalOutput: Array<INormalizedOutputFile>;
+    options: Array<INormalizedOption>;
+    executeBefore: IGeneratorCallback;
+    executeAfter: IGeneratorCallback;
 }
 
 export interface ISettingsFlags extends Record<string, ISettingsFlag> {

@@ -1,5 +1,6 @@
 import {
-    IGeneratorConfig, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
+    IGeneratorCallback,
+    IGeneratorConfig, INormalizedOption, INormalizedOutputFile, ISettingsFlags, IStrictGeneratorConfig, NamingConvention
 } from "./interfaces";
 import {Prop} from "../decorators";
 import {Exception} from "../error/utils";
@@ -16,6 +17,13 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     @Prop() flags: ISettingsFlags;
     @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
     @Prop() output: Array<INormalizedOutputFile>;
+    @Prop() options: Array<INormalizedOption>;
+    @Prop() executeBefore: IGeneratorCallback;
+    @Prop() executeAfter: IGeneratorCallback;
+
+    /**
+     * @deprecated
+     */
     @Prop() optionalOutput: Array<INormalizedOutputFile>;
 
     constructor(private originalUserConfig: IGeneratorConfig) {
@@ -49,8 +57,6 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
                 );
             }
         }
-
-        // TODO: validate optionalOutput items
     }
 
     private checkNamingConvention(convention: NamingConvention): boolean {
@@ -62,7 +68,7 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
     }
 
     private normalizeConfig(config: IGeneratorConfig): IStrictGeneratorConfig {
-        const normalizedConfig = {...config};
+        const normalizedConfig = {...config} as IStrictGeneratorConfig;
 
         normalizedConfig.description = config.description || "";
         normalizedConfig.templatesRoot = config.templatesRoot || "./";
@@ -73,14 +79,32 @@ export default class GeneratorConfig implements IStrictGeneratorConfig {
             return {};
         };
 
-        if (!Array.isArray(config.output)) {
+        if (!Array.isArray(normalizedConfig.output)) {
             normalizedConfig.output = [];
         }
 
-        if (!Array.isArray(config.optionalOutput)) {
+        if (Array.isArray(normalizedConfig.options)) {
+            normalizedConfig.options.forEach((option) => {
+                option.description = option.description || "";
+            });
+        } else {
+            normalizedConfig.options = [];
+        }
+
+        if (!Array.isArray(normalizedConfig.optionalOutput)) {
             normalizedConfig.optionalOutput = [];
         }
 
-        return normalizedConfig as IStrictGeneratorConfig;
+        if (typeof normalizedConfig.executeBefore !== "function") {
+            normalizedConfig.executeBefore = function () {
+            };
+        }
+
+        if (typeof normalizedConfig.executeAfter !== "function") {
+            normalizedConfig.executeAfter = function () {
+            };
+        }
+
+        return normalizedConfig;
     }
 }

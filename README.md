@@ -22,23 +22,24 @@ module.exports = {
             description: "Generates an AngularJS component",
             // create a directory for your component 
             createDirectory: true,
+            // You can define your own CLI options. 
+            // You can use this options in your rules to create files conditionally
+            options: {
+                name: "-s, --styles",
+                description: "create an empty styles file",
+            },
             // description of output files
             output: [
                 {
                     templatePath: "./templates/component.ejs",
                     name: `component.js`
-                }
-            ],
-            // description of optional output files. You can enable this options via console use --syntax
-            optionalOutput: [
-                {
-                    // name of your option
-                    optionName: "-s, --styles",
-                    optionDescription: "create an empty styles file",
-                    // name of generated file
-                    name: "_styles.scss"
+                },
+                {                    
                     // you can specify only file name, in this case Makestuff will create the empty file for you
                     // this is only a small subset of all features, see the detailed description below
+                    name: "_styles.scss",
+                    // use the option created above to create files conditionally
+                    when: (data) => data.command.optionEnabled("styles")
                 }
             ]
         }
@@ -117,6 +118,12 @@ const componentGenerator = {
            myOwnVar: 123
        };
    },
+   // You can define your own CLI options. 
+   // You can use this options in your rules to create files conditionally
+   options: {
+       name: "-s, --styles",
+       description: "create an empty styles file",
+   },
    // Tells the generator where to put the result files
    output: [
        {
@@ -131,16 +138,14 @@ const componentGenerator = {
        },
        {
            name: data => `${data.dashedName}.html` // just create emplty file
+       },
+       {                    
+           // you can specify only file name, in this case Makestuff will create the empty file for you
+           name: "_styles.scss",
+           when: (data) => data.command.optionEnabled("styles")
        }
    ],
-   // Optional files creators accessed via CLI options
-   optionalOutput: [
-       {
-           optionName: "-s, --styles",
-           optionDescription: "include styles file",
-           name: "_styles.scss"
-       }
-   ]
+   
 }
 
 module.exports = {
