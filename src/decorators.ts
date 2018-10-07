@@ -1,12 +1,12 @@
 export function Prop(propertyName?: string): PropertyDecorator {
-    return function (target: Object, propertyKey: string) {
+    return function (target: Object, propertyKey: string | symbol) {
         const normalizedPropName = propertyName || propertyKey;
 
-        function getter() {
+        function getter(this: any) {
             return this.props[normalizedPropName];
         }
 
-        function setter(value: any) {
+        function setter(this: any, value: any) {
             this.props[normalizedPropName] = value;
         }
 

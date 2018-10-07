@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "dist/shell/shell.js",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "bin": {
     "makestuff": "dist/cli/entrypoint.js"
@@ -21,22 +21,22 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@types/node": "^9.6.23",
+    "@types/node": "^10.11.4",
     "@types/semver": "^5.5.0",
     "caporal": "^0.10.0",
     "chalk": "^2.4.1",
     "ejs": "^2.6.1",
     "mkdirp": "^0.5.1",
-    "semver": "^5.5.0",
+    "semver": "^5.5.1",
     "tslib": "^1.9.3",
-    "typescript": "^2.9.2"
+    "typescript": "^3.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.0",
-    "jest": "^23.4.1",
+    "@types/jest": "^23.3.3",
+    "jest": "^23.6.0",
     "npm-run-all": "^4.1.3",
-    "onchange": "^4.1.0",
-    "ts-jest": "^23.0.1",
+    "onchange": "^5.0.2",
+    "ts-jest": "^23.10.4",
     "tslint": "^5.11.0"
   },
   "jest": {
