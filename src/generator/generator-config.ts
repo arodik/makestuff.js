@@ -9,22 +9,22 @@ import {MakestuffErrors} from "../error/list";
 export default class GeneratorConfig implements IStrictGeneratorConfig {
     private props: IStrictGeneratorConfig;
 
-    @Prop() name: string;
-    @Prop() description: string;
-    @Prop() templatesRoot: string;
-    @Prop() namingConvention: NamingConvention;
-    @Prop() createDirectory: boolean;
-    @Prop() flags: ISettingsFlags;
-    @Prop() templateVars: (input: any, predefinedSettings: Record<string, any>) => Object;
-    @Prop() output: Array<INormalizedOutputFile>;
-    @Prop() options: Array<INormalizedOption>;
-    @Prop() executeBefore: IGeneratorCallback;
-    @Prop() executeAfter: IGeneratorCallback;
+    @Prop() name!: string;
+    @Prop() description!: string;
+    @Prop() templatesRoot!: string;
+    @Prop() namingConvention!: NamingConvention;
+    @Prop() createDirectory!: boolean;
+    @Prop() flags!: ISettingsFlags;
+    @Prop() templateVars!: (input: any, predefinedSettings: Record<string, any>) => Object;
+    @Prop() output!: Array<INormalizedOutputFile>;
+    @Prop() options!: Array<INormalizedOption>;
+    @Prop() executeBefore!: IGeneratorCallback;
+    @Prop() executeAfter!: IGeneratorCallback;
 
     /**
      * @deprecated
      */
-    @Prop() optionalOutput: Array<INormalizedOutputFile>;
+    @Prop() optionalOutput!: Array<INormalizedOutputFile>;
 
     constructor(private originalUserConfig: IGeneratorConfig) {
         this.validateConfig(originalUserConfig);
