@@ -24,7 +24,7 @@ export default class MakestuffCli {
     private setupGenerator(generator: Generator, cliEngine: Caporal) {
         const config = generator.config;
         const cliCommand = cliEngine.command(config.name, config.description)
-            .argument("<path>", "Path to generated entity with name in the end");
+            .argument("<path>", "Path to generated entity with name in the end (example: src/app/myTest)");
 
         this.registerOutputOptions(config.optionalOutput, cliCommand, cliEngine);
         this.registerOptions(config.options, cliCommand, cliEngine);
