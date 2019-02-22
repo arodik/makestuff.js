@@ -25,29 +25,36 @@ export default class Generator {
     constructor(public readonly config: IStrictGeneratorConfig) {
     }
 
-    execute(workingDir: string, path: string, options: Array<string>): ExecutionResult {
-        const normalizedPath = PathExtension.trimLeadingSlashes(path),
-            pathToEntityDir = Path.dirname(normalizedPath),
-            rawEntityName = Path.basename(normalizedPath),
-            normalizedEntityName = this.normalizeName(rawEntityName),
-            callbackData = this.getGeneratorCallbackData(rawEntityName, options),
-            result: ExecutionResult = {
-                created: [],
-                errors: []
-            };
+    execute(rootDir: string, path: string, options: Array<string>): ExecutionResult {
+        const normalizedPath = PathExtension.trimLeadingSlashes(path);
+
+        // user enters a relative path to the entity
+        // calculate the relative path from the root to user path and transform it to absolute
+        const fullRelativePath = Path.resolve(process.cwd(), normalizedPath);
+        const relativePathToEntity = Path.relative(rootDir, fullRelativePath);
+        const pathToEntity = Path.resolve(rootDir, relativePathToEntity);
+
+        const pathToEntityDir = Path.dirname(pathToEntity);
+        const rawEntityName = Path.basename(pathToEntity);
+        const normalizedEntityName = this.normalizeName(rawEntityName);
+        const callbackData = this.getGeneratorCallbackData(rawEntityName, options);
+        const result: ExecutionResult = {
+            created: [],
+            errors: []
+        };
 
         this.config.executeBefore(callbackData);
 
         const allPossibleFilesToCreate = [
-            ...this.getNormalizedFiles(this.config.output, workingDir, rawEntityName, options),
-            ...this.getOptionalFiles(options, workingDir, rawEntityName)
+            ...this.getNormalizedFiles(this.config.output, rootDir, rawEntityName, options),
+            ...this.getOptionalFiles(options, rootDir, rawEntityName)
         ];
 
         const filesToCreate = this.filterFilesByWhenCondition(allPossibleFilesToCreate, callbackData);
 
         const absoluteEntityDirPath = this.config.createDirectory
-            ? Path.resolve(workingDir, pathToEntityDir, normalizedEntityName)
-            : Path.resolve(workingDir, pathToEntityDir);
+            ? Path.resolve(rootDir, pathToEntityDir, normalizedEntityName)
+            : Path.resolve(rootDir, pathToEntityDir);
 
         filesToCreate.forEach(function(file) {
             const fullPathToFile = Path.resolve(absoluteEntityDirPath, file.name);

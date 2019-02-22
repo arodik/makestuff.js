@@ -46,7 +46,7 @@ export default class GeneratorShell {
         this._generators.push(new Generator(strictConfig));
     }
 
-    run(workingDir: string, generatorName: string, path: string, options: Array<string> = []): ExecutionResult {
+    run(rootDir: string, generatorName: string, path: string, options: Array<string> = []): ExecutionResult {
         const generator = this.findGeneratorByName(generatorName);
         if (!generator) {
             throw Exception(
@@ -55,7 +55,7 @@ export default class GeneratorShell {
             );
         }
 
-        return generator.execute(workingDir, path, options);
+        return generator.execute(rootDir, path, options);
     }
 
     private findGeneratorByName(id: string): Generator | null {

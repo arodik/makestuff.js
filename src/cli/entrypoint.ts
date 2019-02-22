@@ -12,14 +12,14 @@ const configPath = Config.locate(process.cwd());
 
 if (configPath) {
     // always use config's directory as a working directory
-    const workingDir = path.dirname(configPath);
+    const rootDir = path.dirname(configPath);
     const makestuffConfig = require(configPath) as IMakestuffConfig;
 
     const packageInfo = require("../../package.json");
     Caporal.version(packageInfo.version);
 
     try {
-        const makestuffCli = new MakestuffCli(workingDir, makestuffConfig);
+        const makestuffCli = new MakestuffCli(rootDir, makestuffConfig);
         makestuffCli.run(Caporal);
     } catch (error) {
         const errorInfo = getErrorInfo(error);

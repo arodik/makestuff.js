@@ -6,7 +6,7 @@ import {ConsoleReporter} from "../reporter/console-reporter";
 export default class MakestuffCli {
     private shell: GeneratorShell;
 
-    constructor(private workdir: string, private config: IMakestuffConfig) {
+    constructor(private rootDir: string, private config: IMakestuffConfig) {
         this.shell = new GeneratorShell(this.config);
     }
 
@@ -31,10 +31,10 @@ export default class MakestuffCli {
 
         cliCommand.action((args: Record<string, string>, options: Record<string, any>, logger: Logger) => {
             const reporter = new ConsoleReporter(logger);
-            logger.debug(`Workdir: ${this.workdir}`);
+            logger.debug(`Root Dir: ${this.rootDir}`);
 
             const optionsList = this.getEnabledBooleanOptions(options);
-            const result = this.shell.run(this.workdir, config.name, args.path, optionsList);
+            const result = this.shell.run(this.rootDir, config.name, args.path, optionsList);
 
             reporter.printGeneratorResult(result);
         });
