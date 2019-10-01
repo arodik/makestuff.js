@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "dist/shell/shell.js",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "bin": {
     "makestuff": "dist/cli/entrypoint.js"
@@ -21,33 +21,23 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@types/node": "^10.12.26",
+    "@types/node": "^10.14.19",
     "@types/semver": "^5.5.0",
     "caporal": "^0.10.0",
     "chalk": "^2.4.2",
-    "ejs": "^2.6.1",
+    "ejs": "^2.7.1",
     "mkdirp": "^0.5.1",
-    "semver": "^5.6.0",
-    "tslib": "^1.9.3",
-    "typescript": "^3.3.3333"
+    "semver": "^5.7.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.6.3"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.14",
-    "jest": "^23.6.0",
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
     "npm-run-all": "^4.1.5",
     "onchange": "^5.2.0",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.12.1"
-  },
-  "jest": {
-    "transform": {
-      ".ts": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(\\.(test|spec))\\.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0"
   },
   "author": {
     "name": "Alexandr Rodik",
