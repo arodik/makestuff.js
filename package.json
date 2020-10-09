@@ -1,6 +1,6 @@
 {
   "name": "makestuff",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Tiny scaffolding tool for your project",
   "license": "MIT",
   "main": "dist/shell/shell.js",
