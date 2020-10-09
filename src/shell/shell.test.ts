@@ -122,7 +122,7 @@ describe("shell", function () {
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
-        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+        const resultFileContent = fs.readFileSync(result.created[0], "utf-8");
 
         expect(resultFileContent).toBe(compiledSimpleTemplate);
     });
@@ -149,7 +149,7 @@ describe("shell", function () {
         const result = generator.run(testWorkingDir, "component", testComponentPath);
 
         const pathToCreatedFiles = path.resolve(dirWithTests, testComponentPath);
-        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+        const resultFileContent = fs.readFileSync(result.created[0], "utf-8");
 
         expect(resultFileContent).toBe(compiledSimpleTemplate);
     });
@@ -170,7 +170,7 @@ describe("shell", function () {
         });
 
         const result = generator.run(testWorkingDir, "component", testComponentPath);
-        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+        const resultFileContent = fs.readFileSync(result.created[0], "utf-8");
 
         expect(resultFileContent).toBe(compiledSimpleTemplate);
     });
@@ -220,7 +220,7 @@ describe("shell", function () {
 
         const content = fs.readFileSync(
             result.created[0],
-            "UTF-8"
+            "utf-8"
         );
 
         expect(content).toBe(testContent);
@@ -247,7 +247,7 @@ describe("shell", function () {
         const result = generator.run(testWorkingDir, "component", testComponentPath);
         const content = fs.readFileSync(
             result.created[0],
-            "UTF-8"
+            "utf-8"
         );
 
         expect(content).toBe(commandName);
@@ -280,7 +280,7 @@ describe("shell", function () {
             const result = generator.run(testWorkingDir, "component", testComponentPath, ["optional"]);
             expect(result.created.length).toBe(2);
 
-            const resultFileContent = fs.readFileSync(result.created[1], "UTF-8");
+            const resultFileContent = fs.readFileSync(result.created[1], "utf-8");
             expect(resultFileContent).toBe(testContent);
         });
 
@@ -302,7 +302,7 @@ describe("shell", function () {
             });
 
             const result = generator.run(testWorkingDir, "component", testComponentPath, ["o"]);
-            const resultFileContent = fs.readFileSync(result.created[1], "UTF-8");
+            const resultFileContent = fs.readFileSync(result.created[1], "utf-8");
             expect(resultFileContent).toBe(testContent);
         });
 
@@ -357,7 +357,7 @@ describe("shell", function () {
             testComponentPath,
             ["myTestOption"]
         );
-        const resultFileContent = fs.readFileSync(result.created[0], "UTF-8");
+        const resultFileContent = fs.readFileSync(result.created[0], "utf-8");
 
         expect(resultFileContent).toBe(compiledTemplate);
     });

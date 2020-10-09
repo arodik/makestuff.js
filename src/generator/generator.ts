@@ -165,7 +165,7 @@ export default class Generator {
             return ejs.render(description.template, templateData);
         } else if (description.templatePath) {
             const pathToTemplate = this.normalizePathToTemplate(workingDir, description.templatePath);
-            const rawTpl = fs.readFileSync(pathToTemplate, "UTF-8");
+            const rawTpl = fs.readFileSync(pathToTemplate, "utf-8");
 
             return ejs.render(rawTpl, templateData);
         }
