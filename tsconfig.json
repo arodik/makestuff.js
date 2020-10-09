@@ -5,8 +5,7 @@
     "strict": true,
     "importHelpers": true,
     "experimentalDecorators": true,
-    "outDir": "dist",
-    "esModuleInterop": true
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts"

@@ -6,7 +6,7 @@ import Config from "../extensions/config";
 import {IMakestuffConfig} from "../generator/interfaces";
 import {getErrorInfo} from "../error/utils";
 import {MakestuffErrors} from "../error/list";
-import {red, bold} from "chalk";
+import chalk from "chalk";
 
 const configPath = Config.locate(process.cwd());
 
@@ -24,15 +24,15 @@ if (configPath) {
     } catch (error) {
         const errorInfo = getErrorInfo(error);
         if (errorInfo) {
-            console.error(red(errorInfo.message));
+            console.error(chalk.red(errorInfo.message));
             process.exit(errorInfo.code);
         }
 
-        console.error(bold.red(error));
+        console.error(chalk.bold.red(error));
         process.exit(MakestuffErrors.unknownError.code);
     }
 } else {
-    console.error(red("Can't find " + Config.fileName + " or package.json that contains information about " +
+    console.error(chalk.red("Can't find " + Config.fileName + " or package.json that contains information about " +
         "Makestuff config path"));
     process.exit(MakestuffErrors.cantFindConfig.code);
 }
