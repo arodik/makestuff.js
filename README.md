@@ -2,8 +2,6 @@
 Makestuff is a tiny tool that allows you to create and execute your own simple scaffolding rules for project.
 You can automatically create boring boilerplate stuff in your project.
 
-[![Build Status](https://travis-ci.org/arodik/makestuff.js.svg?branch=master)](https://travis-ci.org/arodik/makestuff.js)
-
 ----------------
 
 ## Example:
@@ -20,9 +18,9 @@ module.exports = {
             // name of your CLI command
             name: "ng-component",
             description: "Generates an AngularJS component",
-            // create a directory for your component 
+            // create a directory for your component
             createDirectory: true,
-            // You can define your own CLI options. 
+            // You can define your own CLI options.
             // You can use this options in your rules to create files conditionally
             options: {
                 name: "-s, --styles",
@@ -34,7 +32,7 @@ module.exports = {
                     templatePath: "./templates/component.ejs",
                     name: `component.js`
                 },
-                {                    
+                {
                     // you can specify only file name, in this case Makestuff will create the empty file for you
                     // this is only a small subset of all features, see the detailed description below
                     name: "_styles.scss",
@@ -118,7 +116,7 @@ const componentGenerator = {
            myOwnVar: 123
        };
    },
-   // You can define your own CLI options. 
+   // You can define your own CLI options.
    // You can use this options in your rules to create files conditionally
    options: {
        name: "-s, --styles",
@@ -128,7 +126,7 @@ const componentGenerator = {
    output: [
        {
            templatePath: "./templates/component.ejs",
-           // yes, you can use function to generate names. 
+           // yes, you can use function to generate names.
            // In this case you will have access to predefinedVars (fist parameter)
            name: data => `${data.dashedName}.component.ts`
        },
@@ -139,13 +137,13 @@ const componentGenerator = {
        {
            name: data => `${data.dashedName}.html` // just create emplty file
        },
-       {                    
+       {
            // you can specify only file name, in this case Makestuff will create the empty file for you
            name: "_styles.scss",
            when: (data) => data.command.optionEnabled("styles")
        }
    ],
-   
+
 }
 
 module.exports = {
