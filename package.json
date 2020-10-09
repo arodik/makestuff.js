@@ -10,6 +10,11 @@
   "bin": {
     "makestuff": "dist/cli/entrypoint.js"
   },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "start": "npm run lint && npm-run-all -p -r ts-watch lint-watch",
     "lint": "tslint -p ./ --force --format stylish",
