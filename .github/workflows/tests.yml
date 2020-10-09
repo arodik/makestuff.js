@@ -1,0 +1,30 @@
+name: Unit Tests
+
+# on: [push] # uncomment for testing
+
+on:
+  push:
+    paths:
+    - src/**
+    - package-lock.json
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8, 14]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Installing dependencies
+      run: npm ci
+    - name: Run tests
+      run : npm test
+      env:
+        CI: true
